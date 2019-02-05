@@ -1,0 +1,25 @@
+.tool {
+    cursor: pointer;
+    display: block;
+    position: relative;
+    width: var(--tools-width);
+    height: var(--header-height);
+    fill: transparent!important;
+    stroke:var(--darkColor);
+    stroke-width: 1px;
+    background-color:rgba(0,0,0,0);
+}
+.tool:hover:nth-child(n),
+.tool:hover text { 
+    fill: var(--hoverBlueColor);
+    stroke: var(--hoverBlueColor);
+}
+#pen-icon circle {
+    fill: var(--darkColor);
+}
+.tool text {
+    font-family: 'Roboto';
+    fill: var(--darkColor);
+    stroke: none!important;
+    font-size: 8pt;
+}

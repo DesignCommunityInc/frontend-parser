@@ -1,0 +1,28 @@
+/* Tools */
+.tools{
+    position: fixed;
+    width: var(--tools-width);
+    height: 100%;
+    background: var(--mainColor);
+    user-select: none;
+    z-index: 100;
+    /* overflow: hidden; */
+}
+.tools object{
+    display: block;
+    position: relative;
+    width: var(--tools-width);
+    height: var(--header-height);
+}
+.tool .tool-text{
+    cursor: pointer;
+    text-align: center;
+    font-size: 6pt;
+    color: var(--darkColor);
+    line-height: var(--header-height);
+    text-transform: uppercase;
+    font-weight: 1000;
+}
+.tool .tool-text:hover{
+    color: #1E90FF;
+}
