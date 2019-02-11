@@ -1,0 +1,17 @@
+<template class="task-template">
+    <ul class="context-wrapper"></ul>
+    <script type='text/javascript'>
+        const { ipcRenderer } = require('electron')
+        ipcRenderer.sendSync('getContextList', (event, sender) => {
+            contextRenderer(sender);
+        })
+        function contextRenderer(context){
+            context.forEach(e => {
+                let listNode = document.createElement('li');
+                listNode.innerHTML = e.text;
+                listNode.setAttribute('data-context', e.data);
+                document.getElementsByClassName('.context-wrapper')[0].append(listNode);
+            });
+        }
+    </script>
+</template>

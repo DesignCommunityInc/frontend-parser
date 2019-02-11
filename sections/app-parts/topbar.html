@@ -1,0 +1,32 @@
+<template class="task-template">
+    <section class="topbar">
+        <div class="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="scale">
+            <input type="text" id="scale" maxlength="4" placeholder="%" value="100%" />
+            <ul class="scale-list">
+            
+            </ul>
+        </div>
+        <p class="mouse-pos-x"></p>
+        <p class="mouse-pos-y"></p>
+        <span class="project-name">Design community</span>
+        <div class="topbar-tools">
+            <span class="tool-button" id="devtools">devtools</span>
+            <span class="tool-button" id="settings">settings</span>
+        </div>
+        <div class="topbar-buttons">
+            <div class="tb-button" id="min"></div>
+            <div class="tb-button" id="max"></div>
+            <div class="tb-button" id="close"></div>
+        </div>
+    </section>
+
+
+    <script type="text/javascript">
+        require("./renderer-process/app-parts/topbar");
+    </script>
+</template>
