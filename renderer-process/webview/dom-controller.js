@@ -19,7 +19,8 @@ let domController = (function(){
         },
         render: function(){
             // console.log(treeConstructor(document.documentElement, true));
-            ipcRenderer.send('onHierarchyCreated', treeConstructor(document.documentElement, true));
+            // ipcRenderer.send('onHierarchyCreated', treeConstructor(document.documentElement, true));
+            console.log(treeConstructor(document.documentElement, true));
             $(tempDivision.element).load('../../sections/native-ui/tempDivision.html')
             this.event()
         },
@@ -98,15 +99,17 @@ function treeConstructor(parentNode) {
     if(parentNode.childNodes) {
         dom = [];
         nodes = parentNode.childNodes;
-        nodes.forEach(node => {
+        nodes.forEach((node, i) => {
             // if(node.nodeType === 1) {
-                dom.push({
+                dom[i] = {
                     node: node,
-                    childNodes: treeConstructor(node)
+                    child: treeConstructor(node)
+                };
+                // dom[i].push(node);
+                // dom[i].push(treeConstructor(node));
                 })
             // }
-        });
-    }
+    };
     return dom;
 }
 // function loopNodeChildren(dom, output)

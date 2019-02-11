@@ -5,13 +5,14 @@ let { ipcRenderer } = require('electron')
 let hierarchy = (function(){
     // private local variables
     const ClassNameSpace = {
-        ListElementClass: 'h-item',
-        ListItemElementClass: 'h-item-child-container',
-        ListItemElementTypeClass: 'h-item-type',
-        ListItemElementNameClass: 'h-item-blockname',
-        ListItemElementIdClass: 'h-item-id',
-        ListItemElementClassnameClass: 'h-item-classname',
-        ListItemElementHrefClass: 'h-item-href'
+        ListContainerClass: '.h-container',
+        ListElementClass: '.h-item',
+        ListItemElementClass: '.h-item-child-container',
+        ListItemElementTypeClass: '.h-item-type',
+        ListItemElementNameClass: '.h-item-blockname',
+        ListItemElementIdClass: '.h-item-id',
+        ListItemElementClassnameClass: '.h-item-classname',
+        ListItemElementHrefClass: '.h-item-href'
     };
     let $this,
         MaxCursorPos,
@@ -90,21 +91,15 @@ let hierarchy = (function(){
 hierarchy.init();
 
 function treeRenderer(dom){
-    let container = null;
+    // let container = null;
     dom.forEach(element => {
-        if(node.nodeType === 1) {
-            if(node.childNodes.length > 0){
-                node.childNodes.forEach(childNode => {
-                    container = document.createElement('ul');
-                    container.append(treeRenderer(childNode))   
-                });
-            }
-            else{
-                container = document.createElement('li');
-                container.append(element.node);
-            }
-        }
+       if(element.node.nodeType === 1){
+        let list = document.createElement('ul');
+        element.node.forEach(child => {
+            // if(child.)
+            // $(element.node).append(child);
+        });
+    } 
     });
-    return container;
     // return container;
 }
