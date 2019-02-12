@@ -19,8 +19,8 @@ let domController = (function(){
         },
         render: function(){
             // console.log(treeConstructor(document.documentElement, true));
-            // ipcRenderer.send('onHierarchyCreated', treeConstructor(document.documentElement, true));
-            console.log(treeConstructor(document.documentElement, true));
+            ipcRenderer.send('onHierarchyCreated', treeConstructor(document.documentElement, true));
+            // console.log(treeConstructor(document.documentElement, true));
             $(tempDivision.element).load('../../sections/native-ui/tempDivision.html')
             this.event()
         },
@@ -77,22 +77,6 @@ let domController = (function(){
 
 domController.init()
 
-// function recurseDomChildren(start, output)
-// {
-//     let nodes;
-//     let dom = []
-//     if(start.childNodes)
-//     {
-//         nodes = start.childNodes;
-//         nodes.array.forEach((node, i) => {
-//             dom.push({
-//                 node: node,
-//                 childNodes: loopNodeChildren(dom, output)
-//             });
-//         });
-//     }
-//     return dom;
-// }
 function treeConstructor(parentNode) {
     let nodes = null;
     let dom = null;
@@ -100,65 +84,18 @@ function treeConstructor(parentNode) {
         dom = [];
         nodes = parentNode.childNodes;
         nodes.forEach((node, i) => {
-            // if(node.nodeType === 1) {
-                dom[i] = {
-                    node: node,
-                    child: treeConstructor(node)
-                };
-                // dom[i].push(node);
-                // dom[i].push(treeConstructor(node));
-                })
-            // }
+            if(node.nodeType === 1) {
+                dom[i] = {};
+                dom[i].arrayOfChild = treeConstructor(node);
+                if (dom[i].arrayOfChild.length === 0) dom[i].arrayOfChild = null;
+                dom[i].node = {};
+                dom[i].node.blockName = node.tagName || null;
+                dom[i].node.border = { width: node.style.borderWidth, color: node.style.borderColor } || null;
+                dom[i].node.background = node.classList || null;
+                dom[i].node.id = node.id || null;
+                dom[i].node.href = node.getAttribute('href') || null;
+            }
+        })
     };
     return dom;
 }
-// function loopNodeChildren(dom, output)
-// {
-//     let node;
-//     // let localDom = [];
-//     for(let i = 0; i < dom.length; i++)
-//     {
-//         node = dom[i];
-//         // if(output)
-//         // {
-//         //     localDom.push(outputNode(node));
-//         // }
-//         if(node.childNodes)
-//         {
-//             dom[i] = {
-//                 node: 
-//                 childNodes: recurseDomChildren(node, output); 
-//             }
-//         }
-//     }
-//     return localDom;
-// }
-
-// function outputNode(node)
-// {
-//     let whitespace = /^\s+$/g;
-//     if(node.nodeType === 1)
-//     {
-//         let className = node.getAttribute('class') || undefined;
-//         let id = node.getAttribute('id') || undefined;
-//         let href = node.getAttribute('href') || undefined;
-//         let parent = node.parentNode
-//         let attributes = {
-//             className: className,
-//             id: id,
-//             href: href
-//         };
-//         ipcRenderer.send('addDomElement', attributes);
-//     }
-//     else if(node.nodeType === 3)
-//     {
-//         //clear whitespace text nodes
-//         node.data = node.data.replace(whitespace, "");
-//         // node.classList = getAttribute('class')
-//         // if(node.data)
-//         // {
-//         //     console.log('text: ' + node.data); 
-//         // }
-//     }  
-//     // return node;
-// }
