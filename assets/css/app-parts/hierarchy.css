@@ -6,17 +6,21 @@
     flex-shrink: 0;
     height: 100%;
     width: 300px;
+    height: 100vh;
     background: var(--mainColor);
     border-left: var(--border-size-default) solid var(--resColor);
     border-right: var(--border-size-default) solid var(--resColor);
-    overflow: hidden;
+    overflow-x: hidden;
     z-index: 100;
 }
 .h-container{
     display: block;
     position: absolute;
     width: 100vw;
-    overflow: hidden;
+    margin-left: 20px;
+    /* overflow-x: hidden;
+    overflow-y: scroll; */
+    /* border: 1px solid #323232; */
 }
 /* .to-body-cursor{
     cursor: ew-resize!important;
@@ -45,6 +49,18 @@
     user-select: none;
     transition: var(--transition-fast);
 }
+.branch{
+    list-style: none;
+    margin-left: -40px;
+    /* padding-left: 60px!important; */
+    cursor: pointer;
+    width: 100%;
+    user-select: none;
+    /* transition: var(--transition-fast); */
+}
+/* .h-container > .branch{
+    margin-left: -20px;
+} */
 .h-item-child-container{
     border: 2px solid var(--mainColor);
     transition: var(--transition-fast);

@@ -91,9 +91,10 @@ function treeConstructor(parentNode) {
                 dom[i].node = {};
                 dom[i].node.blockName = node.tagName || null;
                 dom[i].node.border = { width: node.style.borderWidth, color: node.style.borderColor } || null;
-                dom[i].node.background = node.classList || null;
+                dom[i].node.background = node.style.background || null;
                 dom[i].node.id = node.id || null;
                 dom[i].node.href = node.getAttribute('href') || null;
+                dom[i].node.class = node.classList[0] || null;
             }
         })
     };

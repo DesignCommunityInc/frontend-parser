@@ -5,14 +5,14 @@ let { ipcRenderer } = require('electron')
 let hierarchy = (function(){
     // private local variables
     const ClassNameSpace = {
-        ListContainerClass: '.h-container',
-        ListElementClass: '.h-item',
-        ListItemElementClass: '.h-item-child-container',
-        ListItemElementTypeClass: '.h-item-type',
-        ListItemElementNameClass: '.h-item-blockname',
-        ListItemElementIdClass: '.h-item-id',
-        ListItemElementClassnameClass: '.h-item-classname',
-        ListItemElementHrefClass: '.h-item-href'
+        ListContainerClass: 'h-container',
+        ListElementClass: 'h-item',
+        ListItemElementClass: 'h-item-child-container',
+        ListItemElementTypeClass: 'h-item-type',
+        ListItemElementNameClass: 'h-item-blockname',
+        ListItemElementIdClass: 'h-item-id',
+        ListItemElementClassnameClass: 'h-item-classname',
+        ListItemElementHrefClass: 'h-item-href'
     };
     let $this,
         MaxCursorPos,
@@ -29,18 +29,24 @@ let hierarchy = (function(){
         $(window).trigger('workspace-width-changed', { left: $this.width() + Margin })
     }
     function treeRenderer(list){
-        let container = document.createElement('ul');
-        console.log(list);
-        if(list.arrayOfChild != null) {
-            let child = listItemCreator(ClassNameSpace, list.node);
-            container.append(child);
-            return container;
+        let container = document.createElement('ul');   // creating parent
+        container.classList.add('branch');
+        
+        let parent = listItemCreator(ClassNameSpace, list.node);
+        container.append(parent);
+
+        if(list.arrayOfChild === null) {                // if parent has child 
+            let child = listItemCreator(ClassNameSpace, list.node); // get childlist of child 
+            return child;
         }
+        let childContainer = document.createElement('ul');
+        childContainer.classList.add(ClassNameSpace.ListElementClass);
         list.arrayOfChild.forEach(element => {
+            // if(element.arrayOfChild !== null) console.log(element);
             let child = treeRenderer(element);
-            // console.log(element);
-            container.append(child);
+            childContainer.append(child);
         });
+        container.append(childContainer);
         return container;
     }
     return {
@@ -94,9 +100,9 @@ let hierarchy = (function(){
                 invalidate()
             })
             ipcRenderer.on('onHierarchyCreated-reply', (event, sender) => {
-                let tree;
+                // let tree;
+                console.log(sender);
                 sender.forEach(element => {
-                    // console.log(tree);
                     tree = treeRenderer(element);
                     $('.h-container').append(tree);
                 });
@@ -113,10 +119,11 @@ function listItemCreator(ClassNameSpace, node) {
     child.classList.add(ClassNameSpace.ListItemElementClass);
     Object.keys(node).forEach(key => {
         let span = document.createElement('span');
+        // console.log(key);
         switch(key) {
             case 'blockName': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementNameClass); span.innerHTML = node[key];} break;
             case 'id': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementIdClass);  span.innerHTML = node[key]} break;
-            case 'classList': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementClassnameClass);  span.innerHTML = node[key]} break;
+            case 'class': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementClassnameClass);  span.innerHTML = node[key]} break;
             case 'href': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementHrefClass);  span.innerHTML = node[key]} break;
         }
         child.append(span);
