@@ -29,14 +29,14 @@ let webview
             ipcRenderer.on('workspace-scale', function(event, factor){    
                 webview.setZoomFactor(factor)
             })
-            ipcRenderer.on('devtools-webview-open-renderer', function(){
+            ipcRenderer.on('devtools-webview-open-reply', function(){
                 if (!webview.isDevToolsOpened()){
                     webview.openDevTools()
                 }
                 else if(!webview.isDevToolsFocused())
                         webview.focus()
             })
-            ipcRenderer.on('get-webview-from-renderer', () => {
+            ipcRenderer.on('get-webview-from-reply', () => {
                 return webview
             })
             ipcRenderer.on('ctrl+Z', () => {

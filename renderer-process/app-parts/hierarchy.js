@@ -28,21 +28,21 @@ let hierarchy = (function(){
         MinCursorPos = $this.width() - 5 + Margin; // hierarchy diapason width min
         $(window).trigger('workspace-width-changed', { left: $this.width() + Margin })
     }
+
+    // TREE RENDERER FUNCTION 
     function treeRenderer(list){
         let container = document.createElement('ul');   // creating parent
         container.classList.add('branch');
         
-        let parent = listItemCreator(ClassNameSpace, list.node);
-        container.append(parent);
-
-        if(list.arrayOfChild === null) {                // if parent has child 
+            if(list.arrayOfChild === null) {                // if parent has child 
             let child = listItemCreator(ClassNameSpace, list.node); // get childlist of child 
             return child;
         }
+        let parent = listItemCreator(ClassNameSpace, list.node);
+        container.append(parent);
         let childContainer = document.createElement('ul');
         childContainer.classList.add(ClassNameSpace.ListElementClass);
-        list.arrayOfChild.forEach(element => {
-            // if(element.arrayOfChild !== null) console.log(element);
+        Array.prototype.forEach.call(list.arrayOfChild, (element) => {
             let child = treeRenderer(element);
             childContainer.append(child);
         });
@@ -101,7 +101,6 @@ let hierarchy = (function(){
             })
             ipcRenderer.on('onHierarchyCreated-reply', (event, sender) => {
                 // let tree;
-                console.log(sender);
                 sender.forEach(element => {
                     tree = treeRenderer(element);
                     $('.h-container').append(tree);
@@ -119,14 +118,39 @@ function listItemCreator(ClassNameSpace, node) {
     child.classList.add(ClassNameSpace.ListItemElementClass);
     Object.keys(node).forEach(key => {
         let span = document.createElement('span');
-        // console.log(key);
-        switch(key) {
-            case 'blockName': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementNameClass); span.innerHTML = node[key];} break;
-            case 'id': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementIdClass);  span.innerHTML = node[key]} break;
-            case 'class': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementClassnameClass);  span.innerHTML = node[key]} break;
-            case 'href': if(node[key] != null) { span.classList.add(ClassNameSpace.ListItemElementHrefClass);  span.innerHTML = node[key]} break;
+        if(node[key] !== null) {
+            switch(key) {
+                case 'a_style': 
+                    span.classList.add(ClassNameSpace.ListItemElementTypeClass); 
+                    span.style.borderRadius = node[key].borderRadius; 
+                    span.style.background = node[key].background; 
+                    
+                    if(node[key].borderWidth !== '0px') {
+                        node[key].borderColor = node[key].borderColor.replaceAll(/[rgb()]/, '').split(',')
+                            .reduce((accumulator, currentValue) => { return accumulator + parseInt(currentValue).toString(16); }, "");
+                        while(node[key].borderColor.length < 6) node[key].borderColor += '0';
+                        span.style.boxShadow = "0 0 1px 1px #" + node[key].borderColor; 
+                    }
+                    break;
+                case 'b_blockName': 
+                    span.classList.add(ClassNameSpace.ListItemElementNameClass); 
+                    span.innerHTML = node[key]; 
+                    break;
+                case 'c_id': 
+                    span.classList.add(ClassNameSpace.ListItemElementIdClass);  
+                    span.innerHTML = node[key]; 
+                    break;
+                case 'd_class': 
+                    span.classList.add(ClassNameSpace.ListItemElementClassnameClass);  
+                    span.innerHTML = node[key]; 
+                    break;
+                case 'e_href': 
+                    span.classList.add(ClassNameSpace.ListItemElementHrefClass);  
+                    span.innerHTML = node[key]; 
+                    break;
+            }
+            child.append(span);
         }
-        child.append(span);
     });
     return child;
 }
