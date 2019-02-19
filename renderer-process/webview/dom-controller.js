@@ -100,6 +100,7 @@ class DOMController {
                     dom[i].arrayOfChild = this.treeConstructor(node);
                     if (dom[i].arrayOfChild.length === 0) dom[i].arrayOfChild = null;
                     dom[i].node = {};
+                    dom[i].node.index = Array.prototype.indexOf.call(nodes, node);
                     dom[i].node.a_style = { borderWidth: window.getComputedStyle(node).borderWidth, borderColor: window.getComputedStyle(node).borderColor, borderRadius: window.getComputedStyle(node).borderRadius, background: window.getComputedStyle(node).backgroundColor} || null;
                     dom[i].node.b_blockName = node.tagName || null;
                     dom[i].node.c_id = node.id || null;
@@ -108,6 +109,7 @@ class DOMController {
                 }
             })
         };
+        console.log(dom);
         return dom;
     }
 }

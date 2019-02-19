@@ -85,9 +85,15 @@
     width: var(--type-height);
     height: var(--type-height);
     margin-left: var(--type-height);
+    margin-right: var(--type-height);
     top: calc(var(--param) * 0.5);
-    font-size: 6pt;
-    background: #ee3f54;
+    font-size: 7.5px;
+    vertical-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: var(--darkColor);
+    white-space: nowrap;
+    filter: sepia(.40);
 }
 .h-item-blockname,
 .h-item-id,
@@ -103,11 +109,11 @@
     filter: sepia(.40);
     transition: var(--transition-fast);
 }
-.h-item:hover{
+.branch:hover{
     background: var(--mainLightColor);
     transition: var(--transition-fast);
 }
-.h-item:hover .h-item-child-container{
+.branch:hover .h-item-child-container{
     border-color: var(--mainLightColor);
     transition: var(--transition-fast);
 }

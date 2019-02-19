@@ -124,15 +124,17 @@ function listItemCreator(ClassNameSpace, node) {
                     span.classList.add(ClassNameSpace.ListItemElementTypeClass); 
                     span.style.borderRadius = node[key].borderRadius; 
                     span.style.background = node[key].background; 
-                    
+                    span.style.color = node[key].color;
+
                     if(node[key].borderWidth !== '0px') {
                         node[key].borderColor = node[key].borderColor.replaceAll(/[rgb()]/, '').split(',')
                             .reduce((accumulator, currentValue) => { return accumulator + parseInt(currentValue).toString(16); }, "");
                         while(node[key].borderColor.length < 6) node[key].borderColor += '0';
-                        span.style.boxShadow = "0 0 1px 1px #" + node[key].borderColor; 
+                        span.style.boxShadow = "0 0 0 1px #" + node[key].borderColor; 
                     }
+                    if(node['b_blockName'] == 'P' || node['b_blockName'] == 'A') span.innerHTML = 'text';
                     break;
-                case 'b_blockName': 
+                    case 'b_blockName': 
                     span.classList.add(ClassNameSpace.ListItemElementNameClass); 
                     span.innerHTML = node[key]; 
                     break;
