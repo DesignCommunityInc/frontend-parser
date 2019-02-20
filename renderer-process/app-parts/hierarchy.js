@@ -2,6 +2,8 @@
 const $ = require('jquery')
 let { ipcRenderer } = require('electron')
 
+
+
 let hierarchy = (function(){
     // private local variables
     const ClassNameSpace = {
@@ -93,6 +95,12 @@ let hierarchy = (function(){
                 $this.removeClass("right-border-sizing")
                 AllowToSize = false
             });
+            // mouseClick event
+            $(document).on('click', '.h-item-child-container', function(event){
+                // console.log($(this).parent());
+                // $(this).hide();// = '22px';
+                this.style.height = '35px';
+            });
             ipcRenderer.on('ctrl+Y', (event, sender) => {
                 let w = ($this.width() !== 0) ? 0 : WidthCash
                 WidthCash = ($this.width() !== 0) ? ($this.width() > 150) ? $this.width() : 300 : WidthCash
@@ -114,6 +122,7 @@ let hierarchy = (function(){
 hierarchy.init();
 
 function listItemCreator(ClassNameSpace, node) {
+    let textNodes = /\b(?:P|A|STRONG|SUB|SUP)\b/;
     let child = document.createElement('li');
     child.classList.add(ClassNameSpace.ListItemElementClass);
     Object.keys(node).forEach(key => {
@@ -132,7 +141,7 @@ function listItemCreator(ClassNameSpace, node) {
                         while(node[key].borderColor.length < 6) node[key].borderColor += '0';
                         span.style.boxShadow = "0 0 0 1px #" + node[key].borderColor; 
                     }
-                    if(node['b_blockName'] == 'P' || node['b_blockName'] == 'A') span.innerHTML = 'text';
+                    if(node['b_blockName'].match(textNodes)) span.innerHTML = 'text';
                     break;
                     case 'b_blockName': 
                     span.classList.add(ClassNameSpace.ListItemElementNameClass); 

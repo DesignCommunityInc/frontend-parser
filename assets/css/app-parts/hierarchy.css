@@ -47,19 +47,17 @@
 .branch{
     list-style: none;
     margin-left: -40px;
-    /* padding-left: 60px!important; */
     cursor: pointer;
     width: 100%;
     user-select: none;
-    /* transition: var(--transition-fast); */
 }
-/* .h-container > .branch{
-    margin-left: -20px;
-} */
+ul {
+    overflow: hidden!important;
+}
 .h-item-child-container{
     border: 2px solid var(--mainColor);
     transition: var(--transition-fast);
-    text-transform: lowercase;
+    /* text-transform: uppercase; */
 }
 .h-item-child-container::before{
     position: absolute;
@@ -118,7 +116,6 @@
     transition: var(--transition-fast);
 }
 .h-item-child-container:hover{
-    /* background: var(--mainColor); */
     background: linear-gradient(to right, var(--mainColor), transparent 50%);
     transition: var(--transition-fast);
 }
