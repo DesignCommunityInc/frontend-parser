@@ -64,7 +64,7 @@ let hierarchy = (function(){
         },
         event: function(){
             // mouseMove event
-            $(window).on("mousemove", function(event){
+            $(document).on("mousemove", function(event){
                 let e = event || window.event;
                 if(AllowToSize && e.buttons === 1) {
                     $this.width(e.pageX - Margin - 2);
@@ -74,7 +74,7 @@ let hierarchy = (function(){
                     return;
                 }
                 else
-                    $(window).trigger("mouseup");
+                    $(document).trigger("mouseup");
                 
                 if(e.pageX > MinCursorPos && e.pageX <  MaxCursorPos && !AllowToSize)
                     $this.addClass("right-border-sizing");
@@ -83,7 +83,7 @@ let hierarchy = (function(){
                     $this.removeClass("right-border-sizing");
             });
             // mouseDown event
-            $(window).on("mousedown", function(event){
+            $(document).on("mousedown", function(event){
                 let e = event || window.event;
                 if(e.pageX > MinCursorPos && e.pageX <  MaxCursorPos && e.buttons === 1){              
                     $this.addClass("right-border-sizing");
@@ -91,15 +91,27 @@ let hierarchy = (function(){
                 }
             });
             // mouseUp event
-            $(window).mouseup(function(event){
+            $(document).mouseup(function(event){
                 $this.removeClass("right-border-sizing")
                 AllowToSize = false
             });
             // mouseClick event
-            $(document).on('click', '.h-item-child-container', function(event){
-                // console.log($(this).parent());
-                // $(this).hide();// = '22px';
-                this.style.height = '35px';
+            $(document).on('click', '.branch > .h-item-child-container', function(e){
+                // dblclick
+                e.stopPropagation();
+                $(this).parent().toggleClass('branch-show');
+            });
+            $(document).on('mouseenter', '.h-item-child-container', function(event){
+                let key = this.getAttribute('key');
+                if(key === null) return;
+                // WEBVIEW
+                document.getElementsByTagName('webview')[0].send('element:mouseenter-message', key);
+            });
+            $(document).on('mouseleave', '.h-item-child-container', function(event){
+                let key = this.getAttribute('key');
+                if(key === null) return;
+                // WEBVIEW
+                document.getElementsByTagName('webview')[0].send('element:mouseleave-message', key);
             });
             ipcRenderer.on('ctrl+Y', (event, sender) => {
                 let w = ($this.width() !== 0) ? 0 : WidthCash
@@ -161,6 +173,7 @@ function listItemCreator(ClassNameSpace, node) {
                     break;
             }
             child.append(span);
+            child.setAttribute('key', node['key']);
         }
     });
     return child;

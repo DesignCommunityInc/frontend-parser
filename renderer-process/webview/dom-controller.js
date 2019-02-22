@@ -40,7 +40,7 @@ class DOMController {
     render(){
         ipcRenderer.send('onHierarchyCreated', this.treeConstructor(document.documentElement, true));   // Create tree of DOM nodes 
         $(this.tempDivision.element).load('../../sections/native-ui/tempDivision.html');                // Load html component (div)
-        
+        console.log(this.dom);
         this.IPC();                                                                                     // After rendering call events()
     } 
     IPC(){
@@ -49,6 +49,17 @@ class DOMController {
             Object.keys(sender).forEach(key => {
                 this.tempDivision.element.style[key] = sender[key] + 'px';
             });
+        });
+        ipcRenderer.on('element:mouseenter-message', (event, sender) => {
+            console.log('[key="'+`${sender}`+'"]');
+            let element = document.querySelector('[key="'+`${sender}`+'"]');
+            this.tempSelector = element.style.border;
+            element.classList.add('hover-outline');
+        });
+        ipcRenderer.on('element:mouseleave-message', (event, sender) => {
+            console.log('[key="'+`${sender}`+'"]');
+            let element = document.querySelector('[key="'+`${sender}`+'"]');
+            element.classList.remove('hover-outline');
         });
     }
     
@@ -87,7 +98,13 @@ class DOMController {
         this.resetTempStyles();
         $('body').append(el);
     }
-
+    keyGenerator(length) {
+        let ret = "";
+        while (ret.length < length) {
+          ret += Math.random().toString(16).substring(2);
+        }
+        return ret.substring(0,length);
+    }
     treeConstructor(parentNode) {
         let nodes = null;
         let dom = null;
@@ -99,8 +116,11 @@ class DOMController {
                     dom[i] = {};
                     dom[i].arrayOfChild = this.treeConstructor(node);
                     if (dom[i].arrayOfChild.length === 0) dom[i].arrayOfChild = null;
+                    node.setAttribute('key', this.keyGenerator(8));
+                    // Add node reference to array
+                    this.dom.push(node);
                     dom[i].node = {};
-                    dom[i].node.index = Array.prototype.indexOf.call(nodes, node);
+                    dom[i].node.key = node.getAttribute('key');
                     dom[i].node.a_style = { borderWidth: window.getComputedStyle(node).borderWidth, borderColor: window.getComputedStyle(node).borderColor, borderRadius: window.getComputedStyle(node).borderRadius, background: window.getComputedStyle(node).backgroundColor} || null;
                     dom[i].node.b_blockName = node.tagName || null;
                     dom[i].node.c_id = node.id || null;
@@ -109,7 +129,6 @@ class DOMController {
                 }
             })
         };
-        console.log(dom);
         return dom;
     }
 }

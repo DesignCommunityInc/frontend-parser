@@ -31,6 +31,7 @@ html{
     --transition-normal: .2s ease-in-out;
     --transition-slow: .3s ease-in-out;
     --h-item-height: 30px;
+    --h-item-child-container-border-width: 2px;
     font-family: "Roboto";
 }
 *{
