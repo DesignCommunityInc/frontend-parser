@@ -1,44 +1,59 @@
 const $ = require('jquery')
 let { ipcRenderer } = require('electron')
+// Object.defineProperty(Toolbar, 'constant1', {
+//     value: 33,
+//     writable : false,
+//     enumerable : true,
+//     configurable : false
+// });
 
-let toolbar = (function(){
+$(document).ready(function(){
+
+    let toolbar = new Toolbar();
+
+    $('.tool').on('click', function(e) {
+        if(e.buttons === 0)
+            toolbar.setSelectedTool(this);
+    });
+
+});
+class Toolbar{
     // private
-    const container = $('.tools')[0]
-    // let arr = []
-    let tools = {
-        dom: [],
-        ids: []
-    }
-    return{
-        init: function(){
-            // ipcRenderer.send('setToolsList', arr)
-            tools.dom = ipcRenderer.sendSync('svgFilesRead')
-            this.render()
-        },
-        render: function(){
-            tools.dom.forEach((tool, i) => {
-                tools.dom[i] = createElementFromString(tool)
-                tools.ids.push($(tools.dom[i]).attr('id'))
-                container.append(tools.dom[i])
-            })
-            this.events()
-        },
-        events: function(){
-            $('.tool').on('click', function(e) {
-                if(e.buttons === 0){
-                    ipcRenderer.send('setSelectedTool', tools.ids.indexOf($(this).attr('id')))
-                }
-            })
+    constructor(){
+        this.container = $('.tools')[0]
+        // let arr = []
+        this.tools = {
+            dom: [],
+            ids: []
         }
+        this.init();
     }
-}())
-
-toolbar.init()
-
-function createElementFromString(str) {
-    var div = document.createElement('div')
-    div.innerHTML = str.trim()
-  
-    // Change this to div.childNodes to support multiple top-level nodes
-    return div.firstChild
+    init(){
+        // ipcRenderer.send('setToolsList', arr)
+        this.tools.dom = ipcRenderer.sendSync('svgFilesRead')
+        this.render()
+    }
+    render(){
+        let tools = this.tools;
+        tools.dom.forEach((tool, i) => {
+            tools.dom[i] = this.createElementFromString(tool)
+            tools.ids.push($(tools.dom[i]).attr('id'))
+            this.container.append(tools.dom[i])
+        })
+        this.IPC()
+    }
+    IPC(){
+        
+    }
+    // FUNCTIONS 
+    
+    setSelectedTool(element){
+        ipcRenderer.send('setSelectedTool', this.tools.ids.indexOf($(element).attr('id')));
+    }
+    createElementFromString(str) {
+        var div = document.createElement('div');
+        div.innerHTML = str.trim();
+        // Change this to div.childNodes to support multiple top-level nodes
+        return div.firstChild;
+    }
 }

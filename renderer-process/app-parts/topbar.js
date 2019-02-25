@@ -65,7 +65,7 @@ let topbar = (function(){
             });
             // CUSTOM
 
-            ipcRenderer.on('mouse-x-y-pos-changed-reply', function(event, pos){
+            ipcRenderer.on('mouse-pos-changed-reply', function(event, pos){
                 topBar.position.x.text(pos.x)
                 topBar.position.y.text(pos.y)
             })

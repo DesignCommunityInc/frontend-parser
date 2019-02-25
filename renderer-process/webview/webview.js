@@ -1,46 +1,65 @@
 const $ = require("jquery")
+const _$ = require('jquery-browserify')
+require('jquery-mousewheel')(_$)
 const { ipcRenderer } = require('electron')
 
-let workspace = (function(){
+$(document).ready(function(){
+
+    let workspace = new WorkSpace();
+
+    // Mouse scroll scale function 
+    _$(document).on('mousewheel', function(event){
+       workspace.wheel(event.ctrlKey, event.deltaY, {x: event.pageX, y: event.pageY});
+    });
+
+    $('.backward-button').on('click', function(e) {
+        ipcRenderer.send('goBack')
+    });
+
+    $(document).on('mousemove', function(event){
+        ipcRenderer.send("mouse-pos-changed-message", { x: event.pageX, y: event.pageY })
+    });
+
+    document.getElementsByTagName('body')[0].addEventListener('contextmenu', function(ev) {
+        ev.preventDefault();
+        // showContextMenu();
+        console.log('hello');
+        return false;
+    }, false);
+});
+
+class WorkSpace {
     // private variables
-    let objects = []
-
-    return {
-        init: function(saved_project){
-            this.render()
-        },
-        render: function(){
-            this.events()
-        },
-        events: function(){   
-            $(window).on('click', function(e){
-                if(e.buttons === 2){
-                    showContextMenu();
-                }
-            }); 
-            document.getElementsByTagName('body')[0].addEventListener('contextmenu', function(ev) {
-                ev.preventDefault();
-                // showContextMenu();
-                console.log('hello');
-                return false;
-            }, false);
-            $('.backward-button').on('click', function(e) {
-                ipcRenderer.send('goBack')
-            });
-            $(window).on('mousemove', function(event){
-                ipcRenderer.send("mouse-x-y-pos-changed", { x: event.pageX, y: event.pageY })
-            });
-            ipcRenderer.on('set-page-title-reply', (event, title) => {
-                console.log(`${title}`)
-            });
-            // ipcRenderer.on('getContextList', (event, sender) => {
-            //     event.sender.send
-            // });
-        }
+    constructor() {
+        this.init();
     }
-}())
+    init(saved_project){
+        this.render()
+    }
+    render(){
+        this.IPC()
+    }
+    IPC(){           
+        ipcRenderer.on('set-page-title-reply', (event, title) => {
+            console.log(`${title}`)
+        });
+        // ipcRenderer.on('getContextList', (event, sender) => {
+        //     event.sender.send
+        // });
+    }
 
-workspace.init();
+    // FUNCTIONS 
+    wheel(ctrl, deltaY, position){
+        if(!ctrl) return;
+        if(deltaY > 0)
+            ipcRenderer.send('scale-changed', true);
+        else 
+            ipcRenderer.send('scale-changed', false);
+    
+        ipcRenderer.send('mouse-pos-changed-message', position);
+    }
+}
+
 
 function showContextMenu() {
     let doc = document.createElement('div').innerHTML='<object type="text/html" data="./sections/native-ui/context.html" ></object>';

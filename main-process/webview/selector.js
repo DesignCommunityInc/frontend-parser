@@ -1,9 +1,5 @@
 let { ipcMain } = require("electron")
 
-ipcMain.on('shiftKeyDown', () => {
-
-})
-
 ipcMain.on('getSelectionArea', (event, sender) => {
     let alignment = sender.alignment
     let mouseStartPos = { x: sender.startX, y: sender.startY }

@@ -21,8 +21,8 @@ const $ = require('jquery')
 // $(window).mouseup(function(e){
 //     $('.tmpDiv').remove()
 // })
-$(window).keydown(function (event) {
-    let e = event || window.event
-    e.preventDefault()
-    if (e.shiftKey) ipcRenderer.send('shiftKeyDown')
-})
+// $(window).keydown(function (event) {
+//     let e = event || window.event
+//     e.preventDefault()
+//     if (e.shiftKey) ipcRenderer.send('shiftKeyDown')
+// })

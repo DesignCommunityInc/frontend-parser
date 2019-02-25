@@ -33,4 +33,4 @@ function initialize(){
     })
 }
 
-initialize()
+initialize();
