@@ -1,5 +1,6 @@
 const $ = require("jquery");
 const { ipcRenderer } = require('electron');
+const { session } = require('electron')
 
 
 let workspace = (function(){
@@ -12,15 +13,30 @@ let workspace = (function(){
             this.render();
         },
         render: function(){
+            $(webview).bind('did-start-loading', () => {
+                webview.executeJavaScript('document.write(<script>window.$ = require("jquery");</script>)')
+                webview.executeJavaScript("global.$ = require('jquery');");
+            });
             $(webview).bind('dom-ready', () => {
                 // Here is a webview events
-
                 // webview.openDevTools();
                 ipcRenderer.send('set-page-title', webview.getTitle());
                 this.events();
+                webview.executeJavaScript("global.$ = require('jquery');");
             });
         },
-        events: function(){        
+        events: function(){
+            let session =  $('.webview')[0].getWebContents().session;
+            session.cookies.get({ url : 'http://smart-home.h1n.ru/' }, function(error, cookies) {
+                console.log(cookies);
+                let cookieStr = ''
+                for (var i = 0; i < cookies.length; i++) {
+                    let info = cookies[i];
+                    cookieStr += `${info.name}=${info.value};`;
+                    console.log(info.value, info.name);
+                }
+                console.log(cookieStr);
+            });
             $('.webview').mouseover(function(){
                 $('.webview')[0].contentWindow.focus();
             });

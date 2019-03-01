@@ -5,6 +5,7 @@ const { ipcRenderer } = require('electron')
 let _process = process
 
 process.once('loaded', function(){
+    console.log(123);
     global.sendMainAsync = function(channel, sender){
         ipcRenderer.send(channel, sender)
     }
@@ -20,7 +21,6 @@ process.once('loaded', function(){
 
 
 // Set a variable in the page before it loads
-// webFrame.executeJavaScript('window.foo = "foo";')
 
 // // The loaded page will not be able to access this, it is only available
 // // in this context

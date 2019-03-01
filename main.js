@@ -8,7 +8,6 @@ const os = require('os');
 const {app, BrowserWindow} = electron;
 
 let win
-
 // Listen for the app to be ready 
 app.on('ready', function(){
     // Create new window
@@ -25,7 +24,7 @@ app.on('ready', function(){
         webPreferences: {
             // nodeIntegration: false,
             // nodeIntegrationInWorker: false,
-            preload: 'file://' + path.join(__dirname, 'preload.js')
+            // preload: 'file://' + path.join(__dirname, 'preload.js')
         }
     })
     // (os == 'win32' ? 'file://' : '')
