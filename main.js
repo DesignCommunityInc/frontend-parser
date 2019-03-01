@@ -3,7 +3,7 @@ const electron = require('electron')
 const url = require('url')
 const path = require('path')
 const glob = require('glob')
-
+const os = require('os');
 // let {ipcMain} = require('electron')
 const {app, BrowserWindow} = electron;
 
@@ -21,16 +21,22 @@ app.on('ready', function(){
         frame: false,
         show: false,
         backgroundColor: '#e5e5e5',
-        title: 'rins-app'
-    });
+        title: 'rins-app',
+        webPreferences: {
+            // nodeIntegration: false,
+            // nodeIntegrationInWorker: false,
+            preload: 'file://' + path.join(__dirname, 'preload.js')
+        }
+    })
+    // (os == 'win32' ? 'file://' : '')
     win.openDevTools();
     // Load window
     win.loadURL(path.join(__dirname, 'index.html'));
     win.on('ready-to-show', () => {
         win.maximize();
         win.show();
-    });
-});
+    })
+})
 
 
 // Require each JS file in the main-process dir

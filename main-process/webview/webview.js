@@ -12,6 +12,13 @@ function initialize(){
         });
         win.webContents.send('mouse-pos-changed-reply', pos);
     }); 
+    ipcMain.on('webview-loaded', (event, title) => {
+        Array.prototype.forEach.call(BrowserWindow.getAllWindows(), (window) => {
+            if (window.getTitle() == 'rins-app') 
+                win = window;
+        });
+        win.webContents.send('webview-loaded-reply');
+    });
     ipcMain.on('set-page-title', (event, title) => {
         Array.prototype.forEach.call(BrowserWindow.getAllWindows(), (window) => {
             if (window.getTitle() == 'rins-app') 

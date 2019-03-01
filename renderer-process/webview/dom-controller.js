@@ -1,5 +1,4 @@
 const $ = require('jquery')
-let { ipcRenderer } = require('electron')
 
 $(document).ready(function() {
 
@@ -19,10 +18,6 @@ $(document).ready(function() {
     });
 });
 
-
-
-
-
 class DOMController {
     constructor(){
         this.tempDivision = {
@@ -38,25 +33,25 @@ class DOMController {
         this.render();
     }
     render(){
-        ipcRenderer.send('onHierarchyCreated', this.treeConstructor(document.documentElement, true));   // Create tree of DOM nodes 
+        sendMainAsync('onHierarchyCreated', this.treeConstructor(document.documentElement, true));   // Create tree of DOM nodes 
         $(this.tempDivision.element).load('../../sections/native-ui/tempDivision.html');                // Load html component (div)
         console.log(this.dom);
         this.IPC();                                                                                     // After rendering call events()
     } 
     IPC(){
         // IPC: Get selected area parametres: (x0, y0); (x1, y1)
-        ipcRenderer.on('getSelectionArea-reply', (event, sender) => {
+        addRendererListener('getSelectionArea-reply', (event, sender) => {
             Object.keys(sender).forEach(key => {
                 this.tempDivision.element.style[key] = sender[key] + 'px';
             });
         });
-        ipcRenderer.on('element:mouseenter-message', (event, sender) => {
+        addRendererListener('element:mouseenter-message', (event, sender) => {
             console.log('[key="'+`${sender}`+'"]');
             let element = document.querySelector('[key="'+`${sender}`+'"]');
             this.tempSelector = element.style.border;
             element.classList.add('hover-outline');
         });
-        ipcRenderer.on('element:mouseleave-message', (event, sender) => {
+        addRendererListener('element:mouseleave-message', (event, sender) => {
             console.log('[key="'+`${sender}`+'"]');
             let element = document.querySelector('[key="'+`${sender}`+'"]');
             element.classList.remove('hover-outline');
@@ -64,28 +59,24 @@ class DOMController {
     }
     
     // FUNCTIONS
-    
     setSelectionMouseStartPos(e) {
         this.tempDivision.mouseStartPos = { x: e.pageX, y: e.pageY };
     }
-    
     setSelectionArea(e) {
-        let selectedTool = ipcRenderer.sendSync('getSelectedTool');
+        let selectedTool = sendMainSync('getSelectedTool');
         if(selectedTool !== -1){
             $('body').append(this.tempDivision.element);
             window.getSelection().removeAllRanges();
-            ipcRenderer.send('getSelectionArea', { alignment: e.shiftKey, pageX: e.pageX, pageY: e.pageY, startX: this.tempDivision.mouseStartPos.x, startY: this.tempDivision.mouseStartPos.y, offsetX: $(this.tempDivision.element).offset().left, offsetY: $(this.tempDivision.element).offset().top });
+            sendMainAsync('getSelectionArea', { alignment: e.shiftKey, pageX: e.pageX, pageY: e.pageY, startX: this.tempDivision.mouseStartPos.x, startY: this.tempDivision.mouseStartPos.y, offsetX: $(this.tempDivision.element).offset().left, offsetY: $(this.tempDivision.element).offset().top });
             if(selectedTool === 2) $(this.tempDivision.element).css({'border-radius': '50%'});
         }
     }
-    
     resetTempStyles() {
         Object.keys(this.tempDivision.element.style).forEach(key => {
             this.tempDivision.element.style[key] = "";
         })
         $(this.tempDivision.element).remove();
     }
-    
     addNode() { 
         let node = this.tempDivision.element;
         let el = document.createElement('div');

@@ -36,3 +36,7 @@ app.init()
 String.prototype.replaceAll = function(search, replace){
     return this.split(search).join(replace);
 }
+
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}

@@ -20,15 +20,23 @@ let workspace = (function(){
                 this.events();
             });
         },
-        events: function(){
-                          
+        events: function(){        
             $('.webview').mouseover(function(){
                 $('.webview')[0].contentWindow.focus();
             });
-            ipcRenderer.on('workspace-scale', function(event, sender){
+            ipcRenderer.on('webview-loaded-reply', () => {
+                let preloaders = document.getElementsByClassName('preloader');
+                Array.prototype.forEach.call(preloaders, (preloader) => {
+                    preloader.classList.add('preloader_loaded');
+                    setTimeout(function(){
+                        preloader.remove();
+                    }, 300)
+                })
+            });
+            ipcRenderer.on('workspace-scale', (event, sender) => {
                 webview.setZoomFactor(sender);
             });
-            ipcRenderer.on('devtools-webview-open-reply', function(){
+            ipcRenderer.on('devtools-webview-open-reply', () => {
                 if (!webview.isDevToolsOpened()){
                     webview.openDevTools();
                 }

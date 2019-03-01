@@ -121,17 +121,17 @@
     filter: sepia(.40);
     transition: var(--transition-fast) filter;
 }
-/* .branch:hover{
+.branch-hover{
     background: var(--mainLightColor);
     border-color: var(--mainLightColor);
     transition: var(--transition-fast);
-} */
-/* .branch:hover .h-item-child-container{
+}
+.branch-hover .h-item-child-container{
     border-color: var(--mainLightColor);
     transition: var(--transition-fast);
-} */
+}
 .h-item-child-container:hover{
-    background-color: linear-gradient(to right, var(--mainColor), transparent 50%);
+    background-color: linear-gradient(to right, var(--mainColor), transparent 50%)!important;
     transition-property: background-color, border;
     transition: var(--transition-fast);
 }

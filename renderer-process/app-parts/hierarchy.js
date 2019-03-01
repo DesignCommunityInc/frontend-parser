@@ -8,80 +8,70 @@ $(document).ready(function(){
 
     $(document).on("mousemove", function(event){
         let e = event || window.event;
-        if(AllowToSize && e.buttons === 1) {
-            $this.width(e.pageX - Margin - 2);
-            // Remove all selections from the window
-            window.getSelection().removeAllRanges(); 
-            invalidate();
-            return;
-        }
-        else
-            $(document).trigger("mouseup");
-        
-        if(e.pageX > MinCursorPos && e.pageX <  MaxCursorPos && !AllowToSize)
-            $this.addClass("right-border-sizing");
-        
-        else if(!AllowToSize)
-            $this.removeClass("right-border-sizing");
+        tree.addResizingStyles(
+            tree.isAvailableResizing(e.pageX)
+        );
+        if(e.buttons !== 1) return;      
+        tree.resize(e.pageX);
     });
     // mouseDown event
     $(document).on("mousedown", function(event){
         let e = event || window.event;
-        if(e.pageX > MinCursorPos && e.pageX <  MaxCursorPos && e.buttons === 1){              
-            $this.addClass("right-border-sizing");
-            AllowToSize = true;
-        }
+        if(e.buttons !== 1 || !tree.isAvailableResizing(e.pageX)) return;
+        tree.allowToSize = true;
+        tree.container[0].classList.add('right-border-sizing');     
     });
     // mouseUp event
     $(document).mouseup(function(event){
-        $this.removeClass("right-border-sizing")
-        AllowToSize = false
+        let e = event || window.event;
+        if(!tree.isAvailableResizing(e.pageX)) return;
+        tree.allowToSize = false;
+        tree.container[0].classList.remove('right-border-sizing'); 
     });
     // mouseClick event
-    $(document).on('click', '.branch > .h-item-child-container', function(e){
-        // dblclick
+    $(document).on('click', '.branch > .h-item-child-container', function(event){
+        let e = event || window.event;
         e.stopPropagation();
         $(this).parent().toggleClass('branch-show');
     });
-    $(document).on('mouseenter', '.h-item-child-container', function(event){
+    $(document).on('mouseenter', '.h-item-child-container', function(){
         let key = this.getAttribute('key');
         if(key === null) return;
         // WEBVIEW
         document.getElementsByTagName('webview')[0].send('element:mouseenter-message', key);
     });
-    $(document).on('mouseleave', '.h-item-child-container', function(event){
+    $(document).on('mouseleave', '.h-item-child-container', function(){
         let key = this.getAttribute('key');
         if(key === null) return;
         // WEBVIEW
         document.getElementsByTagName('webview')[0].send('element:mouseleave-message', key);
     });
-    
-})
-class Element extends Node{
-    constructor(){
-        super();
+    // let branch = null;
+    // $(document).on('mouseenter', '.branch', function(event){
+    //     if(branch !== this && branch !== null) branch.classList.remove('branch-hover');
+    //     let e = event || window.event;
+    //     e.stopPropagation();
+    //     this.classList.add('branch-hover');
+    //     branch = this;
+    // });  
+    // $(document).on('mouseleave', '.branch', function(){
+    //     this.classList.remove('branch-hover');
+    //     branch = this;
+    // });  
+});
 
-    }
-
-    mouseLeave(){
-
-    }
-    mouseOver(){
-
-    }
-}
 class Tree {
     // private local variables
     constructor(){
-        this.ClassNameSpace = {
-            ListContainerClass: 'h-container',
-            ListElementClass: 'h-item',
-            ListItemElementClass: 'h-item-child-container',
-            ListItemElementTypeClass: 'h-item-type',
-            ListItemElementNameClass: 'h-item-blockname',
-            ListItemElementIdClass: 'h-item-id',
-            ListItemElementClassnameClass: 'h-item-classname',
-            ListItemElementHrefClass: 'h-item-href'
+        this.classNameSpace = {
+            containerClass: 'h-container',
+            elementClass: 'h-item',
+            itemElementClass: 'h-item-child-container',
+            itemElementTypeClass: 'h-item-type',
+            itemElementNameClass: 'h-item-blockname',
+            itemElementIdClass: 'h-item-id',
+            itemElementClassnameClass: 'h-item-classname',
+            itemElementHrefClass: 'h-item-href'
         };
         this.container = null;
         this.maxCursorPos = null;
@@ -91,6 +81,8 @@ class Tree {
         this.widthCash = null;
         this.dom = [];
         this.tree = null;
+
+        this.init();
     }
     init(){ 
         this.container = $(".hierarchy");
@@ -98,16 +90,16 @@ class Tree {
         this.margin = parseInt($('html').css("--tools-width").trim(" px", '')); // hierarchy diapason width min
         this.render();
     }
-    render(){
+    async render(){
         this.invalidate();
-        this.IPC();
+        this.IPCSync();
+        await this.IPCAsync();
     }
-    IPC(){
-        // mouseMove event
+    async IPCAsync(){
         ipcRenderer.on('onHierarchyCreated-reply', (event, sender) => {
             sender.forEach(element => {
-                this.tree = treeRenderer(element);
-                $('.h-container').append(this.tree);
+                this.tree = this.treeRenderer(element);
+                this.container.find(`.${this.classNameSpace.containerClass}`).append(this.tree);
             });
         });
         ipcRenderer.on('ctrl+Y', (event, sender) => {
@@ -117,11 +109,39 @@ class Tree {
             this.invalidate();
         });
     }
-    
+    IPCSync(){
+
+    }
+
+    // FUNCTIONS
+
     invalidate() {
         this.maxCursorPos = this.container.width() + 5 + this.margin; // hierarchy diapason width max _d -> diapason
         this.minCursorPos = this.container.width() - 5 + this.margin; // hierarchy diapason width min
         $(window).trigger('workspace-width-changed', { left: this.container.width() + this.margin });
+        return false;
+    }
+    isAvailableResizing(x){
+        return x > this.minCursorPos && x <  this.maxCursorPos && !this.allowToSize;
+    }
+    addResizingStyles(available){
+        if(available)
+            this.container.addClass("right-border-sizing");
+        else if(!this.allowToSize)
+            this.container.removeClass("right-border-sizing");
+
+        return false;
+    }
+    resize(x){
+        if(this.allowToSize) {
+            this.container.width(x - this.margin - 2);
+            // Remove all selections from the window
+            window.getSelection().removeAllRanges(); 
+            this.invalidate();
+            return false;
+        }      
+        else
+            $(document).trigger("mouseup");
     }
     // element_MouseLeave(key){
     //     let key = this.getAttribute('key');
@@ -141,7 +161,7 @@ class Tree {
         let parent = this.listItemCreator(list.node);
         container.append(parent);
         let childContainer = document.createElement('ul');
-        childContainer.classList.add(ClassNameSpace.ListElementClass);
+        childContainer.classList.add(this.classNameSpace.elementClass);
         Array.prototype.forEach.call(list.arrayOfChild, (element) => {
             let child = this.treeRenderer(element);
             childContainer.append(child);
@@ -152,13 +172,13 @@ class Tree {
     listItemCreator(node) {
         let textNodes = /\b(?:P|A|STRONG|SUB|SUP)\b/;
         let child = document.createElement('li');
-        child.classList.add(this.ClassNameSpace.ListItemElementClass);
+        child.classList.add(this.classNameSpace.itemElementClass);
         Object.keys(node).forEach(key => {
             let span = document.createElement('span');
             if(node[key] !== null) {
                 switch(key) {
                     case 'a_style': 
-                        span.classList.add(this.ClassNameSpace.ListItemElementTypeClass); 
+                        span.classList.add(this.classNameSpace.itemElementTypeClass); 
                         span.style.borderRadius = node[key].borderRadius; 
                         span.style.background = node[key].background; 
                         span.style.color = node[key].color;
@@ -172,19 +192,19 @@ class Tree {
                         if(node['b_blockName'].match(textNodes)) span.innerHTML = 'text';
                         break;
                     case 'b_blockName': 
-                        span.classList.add(this.ClassNameSpace.ListItemElementNameClass); 
+                        span.classList.add(this.classNameSpace.itemElementNameClass); 
                         span.innerHTML = node[key]; 
                         break;
                     case 'c_id': 
-                        span.classList.add(this.ClassNameSpace.ListItemElementIdClass);  
+                        span.classList.add(this.classNameSpace.itemElementIdClass);  
                         span.innerHTML = node[key]; 
                         break;
                     case 'd_class': 
-                        span.classList.add(this.ClassNameSpace.ListItemElementClassnameClass);  
+                        span.classList.add(this.classNameSpace.itemElementClassnameClass);  
                         span.innerHTML = node[key]; 
                         break;
                     case 'e_href': 
-                        span.classList.add(this.ClassNameSpace.ListItemElementHrefClass);  
+                        span.classList.add(this.classNameSpace.itemElementHrefClass);  
                         span.innerHTML = node[key]; 
                         break;
                 }

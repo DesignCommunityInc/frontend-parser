@@ -6,18 +6,18 @@ const { ipcRenderer } = require('electron')
 $(document).ready(function(){
 
     let workspace = new WorkSpace();
-
+    sendMainAsync('webview-loaded');
     // Mouse scroll scale function 
     _$(document).on('mousewheel', function(event){
        workspace.wheel(event.ctrlKey, event.deltaY, {x: event.pageX, y: event.pageY});
     });
 
     $('.backward-button').on('click', function(e) {
-        ipcRenderer.send('goBack')
+        sendMainAsync('goBack')
     });
 
     $(document).on('mousemove', function(event){
-        ipcRenderer.send("mouse-pos-changed-message", { x: event.pageX, y: event.pageY })
+        sendMainAsync("mouse-pos-changed-message", { x: event.pageX, y: event.pageY })
     });
 
     document.getElementsByTagName('body')[0].addEventListener('contextmenu', function(ev) {
@@ -40,10 +40,10 @@ class WorkSpace {
         this.IPC()
     }
     IPC(){           
-        ipcRenderer.on('set-page-title-reply', (event, title) => {
+        addRendererListener('set-page-title-reply', (event, title) => {
             console.log(`${title}`)
         });
-        // ipcRenderer.on('getContextList', (event, sender) => {
+        // addRendererListener('getContextList', (event, sender) => {
         //     event.sender.send
         // });
     }
@@ -52,11 +52,11 @@ class WorkSpace {
     wheel(ctrl, deltaY, position){
         if(!ctrl) return;
         if(deltaY > 0)
-            ipcRenderer.send('scale-changed', true);
+            sendMainAsync('scale-changed', true);
         else 
-            ipcRenderer.send('scale-changed', false);
+            sendMainAsync('scale-changed', false);
     
-        ipcRenderer.send('mouse-pos-changed-message', position);
+        sendMainAsync('mouse-pos-changed-message', position);
     }
 }
 
