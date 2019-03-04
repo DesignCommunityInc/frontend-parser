@@ -34,7 +34,7 @@ class DOMController {
     }
     render(){
         sendMainAsync('onHierarchyCreated', this.treeConstructor(document.documentElement, true));   // Create tree of DOM nodes 
-        $(this.tempDivision.element).load('../../sections/native-ui/tempDivision.html');                // Load html component (div)
+        // $(this.tempDivision.element).load('../../sections/native-ui/tempDivision.html');                // Load html component (div)
         console.log(this.dom);
         this.IPC();                                                                                     // After rendering call events()
     } 

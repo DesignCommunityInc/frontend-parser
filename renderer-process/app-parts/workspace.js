@@ -17,14 +17,27 @@ let workspace = (function(){
             //     webview.executeJavaScript('document.write(<script>window.$ = require("jquery");</script>)')
             //     webview.executeJavaScript("global.$ = require('jquery');");
             // });
+            ipcRenderer.on('log', (event, sender) => {
+                console.log(`${sender}`);
+            });
             $(webview).bind('dom-ready', () => {
                 // Here is a webview events
                 // webview.openDevTools();
+
                 ipcRenderer.send('set-page-title', webview.getTitle());
+                webview.executeJavaScript(`require('${__dirname.replaceAll('\\', '/')}/../webview/webview')`);
+                webview.executeJavaScript(`require('${__dirname.replaceAll('\\', '/')}/../webview/dom-controller')`);
+                webview.executeJavaScript(`require('${__dirname.replaceAll('\\', '/')}/../webview/selector')`);
+                webview.executeJavaScript(`require('${__dirname.replaceAll('\\', '/')}/../webview/content-loader')`);
+                // webview.executeJavaScript(`require('${__dirname.replaceAll('\\', '/')}/../webview/content-loader')`);
+                webview.send('require', 'jquery');
+                webview.executeJavaScript('let script = document.createElement("script"); script.src="js/header-main-script.js";document.getElementsByTagName("head")[0].append(script)');
+                // webview.send('require', 'jquery');
                 this.events();
             });
         },
         events: function(){
+            console.log(webview.getWebContents());
             // let session =  $('.webview')[0].getWebContents().session;
             // session.cookies.get({ url : 'http://smart-home.h1n.ru/' }, function(error, cookies) {
             //     console.log(cookies);

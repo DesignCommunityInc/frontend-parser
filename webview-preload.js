@@ -4,6 +4,8 @@ const { ipcRenderer } = require('electron')
 let _process = process
 
 process.once('loaded', function(){
+    global.$ = require('jquery');
+    console.log(123);
     global.sendMainAsync = function(channel, sender){
         ipcRenderer.send(channel, sender)
     }
@@ -16,6 +18,16 @@ process.once('loaded', function(){
     }
 })
 
+// let UserDocument = {
+//     addRequirements(module){
+//         require(`${sender}`);
+//         // global.$ = $;
+//         console.log(`require(${sender})`);
+//     }
+// }
+// ipcRenderer.on('require', (event, sender) => { 
+//     global.$ = require('jquery');   
+// });
 
 
 // Set a variable in the page before it loads

@@ -5,7 +5,11 @@ $(document).ready(function(){
 
 
 });
-
+addRendererListener('selected-file', (event, sender) => {
+    console.log(sender[0]);
+    $('.webview')[0].loadURL(`${sender[0]}`);
+    // $('.webview')[0].reload();
+});
 class Menu {
     constructor(){
         this.nameSpace = {
@@ -58,7 +62,7 @@ class Menu {
         this.IPCAsync();
     }
     IPCAsync(){
-
+        
     }
 
     // FUNCTIONS

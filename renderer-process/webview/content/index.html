@@ -8,12 +8,14 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/routingdcm.js"></script>
     <!-- <script src="scripts/wheel-indicator.js"></script> -->
     <script src="js/header-main-script.js"></script>
     <!-- <script src="scripts/parallax-main.js"></script>  -->
     <title>Главная</title>
 </head>
 <body>
+    <dcm-screen-app>
 <header>
     <div class="left-side">
         <div class="to-left-menu">
@@ -156,10 +158,12 @@
             <h3>Вы недвано слушали музыкантов схожих по жанру</h3>
         </div>
         <div class="recomendation-artists">
-                <a href="PetitBis%C3%91%C2%81uit.html"><div style="background-image: url(images/petit-bisquit.jpg) " class="artist">
+                <a class="dcm-to-link" href="PetitBis%C3%91%C2%81uit.html">
+                    <div style="background-image: url(images/petit-bisquit.jpg) " class="artist">
                     <p class="artist-name">Petit Bisсuit</p>
                     <div class="background"></div>
-                </div></a>
+                </div>
+            </a>
                 <div style="background-image: url(images/chainsmokers.jpg) " class="artist">
                     <p class="artist-name">Chainsmokers</p>
                     <div class="background"></div>
@@ -213,5 +217,6 @@
         </div>
     </div>
 </section>
+    </dcm-screen-app>
 </body>
 </html>

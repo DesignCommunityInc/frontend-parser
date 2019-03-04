@@ -11,19 +11,19 @@ Element.prototype.remove = function() {
 }
 
 //Adding an event listener to an html button which will send open-file-dialog to the main process
-const ipc = require('electron').ipcRenderer
-const selectDirBtn = document.getElementById('select-file')
+// const ipc = require('electron').ipcRenderer
+// const selectDirBtn = document.getElementById('select-file')
 
-selectDirBtn.addEventListener('click', function (event) {
-     sendMainAsync('open-file-dialog');
-});
+// selectDirBtn.addEventListener('click', function (event) {
+//      sendMainAsync('open-file-dialog');
+// });
 
-//Getting back the information after selecting the file
-addRendererListener('selected-file', function (event, sender) {
-    console.log(sender);
-});
+// //Getting back the information after selecting the file
+// addRendererListener('selected-file', function (event, sender) {
+//     console.log(sender);
+// });
 
-//https://ourcodeworld.com/articles/read/374/how-to-download-the-source-code-js-css-and-images-of-a-website-through-its-url-web-scraping-with-node-js
+// //https://ourcodeworld.com/articles/read/374/how-to-download-the-source-code-js-css-and-images-of-a-website-through-its-url-web-scraping-with-node-js
 
 let wrapper = $('#content-loader');
 let __basedir = (`${__dirname}`).replaceAll('\\', '/');
@@ -64,7 +64,7 @@ let __basedir = (`${__dirname}`).replaceAll('\\', '/');
 
 
 
-// let websiteUrl = 'http://smart-home.h1n.ru/';
+// let websiteUrl = 'http://smart-home.h1n.ru';
 
 // let options = {
 //     urls: [websiteUrl],
