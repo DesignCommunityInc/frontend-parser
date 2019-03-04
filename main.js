@@ -24,7 +24,7 @@ app.on('ready', function(){
         webPreferences: {
             // nodeIntegration: false,
             // nodeIntegrationInWorker: false,
-            // preload: 'file://' + path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'preload.js')
         }
     })
     // (os == 'win32' ? 'file://' : '')

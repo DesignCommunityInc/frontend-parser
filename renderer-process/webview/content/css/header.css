@@ -1,0 +1,289 @@
+.left-side{
+    position: relative;
+    width:32%;
+    height: 100%;
+    /* background: red; */
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+.center-side{
+    position: relative;
+    width:32%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    /* background: red; */
+}
+.right-side{
+    position: relative;
+    width:32%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    /* background: red; */
+}
+.screen-wrapper{
+    position: fixed;
+    display: none;
+    height: 100%;
+    width: 100%;
+    z-index: 9;
+    background: black;
+    opacity: 0.3;
+    transition: .3s;
+}
+.sc-wr-active{
+    display: block;
+}
+
+/* LEFT SIDE ELEMENTS */
+
+.to-left-menu{
+    position: relative;
+    height: 23%;
+    width: 34px;
+    /* background: red;  */
+    cursor: pointer;
+    opacity: 0.6;
+    transition: .5s;
+}
+.to-left-menu > span{
+    position: relative;
+    display: block;
+    height: 14%;
+    margin-bottom: 3px; 
+    width: 100%;
+    background: white;   
+}
+.to-left-menu:hover{
+    opacity: 1;
+}
+
+.search{
+    position: relative;
+    left: 130px;
+}
+.search > input{
+    position: relative;
+    left: 0px;
+    top: -5px;
+    height: 100%;
+    border: none;
+    background: none;
+    color: white;
+    font-size: 14pt;
+}
+
+
+/* CENTER SIDE ELEMENTS */
+.user-wrapper{
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    transition: all .3s;
+    cursor: pointer;
+    z-index: 1;
+    padding: 10px 15px;
+}
+.user-background{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: white;
+    opacity: 0;
+    transition: .3s;
+    z-index: 1;
+    border-radius: 40px;
+}
+.user-wrapper:hover > .user-background{
+    opacity: 0.1;
+}
+.user-wrapper-hide{
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    transition: all .3s;
+    transform: translateY(-90px);
+}
+.user{
+    height: 45px;
+    width: 45px;
+    position: relative;
+    background: white;
+    border-radius: 100%;
+    z-index: 2;
+}
+.user-name{
+    color: white;
+    font-size: 13pt;
+    margin-left: 15px;
+    z-index: 2;
+}
+.user-stub{
+    position: absolute;
+    height: 5px;
+    width: 47px;
+    /* background: var(--color-secondaryBlack); */
+    background: white;
+    border-radius: 20px;
+    opacity: 0.2;
+    transition: all .3s;
+    z-index: 0;
+}
+/* .center-side:hover > .user-stub{
+    opacity: 1;
+} */
+.user-stub-hide{
+    position: absolute;
+    height: 5px;
+    width: 0px;
+    opacity: 0;
+    background: var(--color-secondaryBlack);
+    border-radius: 10px;
+    transition: all .3s;
+}
+
+/* RIGHT SIDE ELEMENTS */
+
+/* MENU */
+.menu-wrapper{
+    position: fixed;
+    z-index: 10;
+    height: 100%;
+    width: 325px;
+    background: var(--color-darkBlack); 
+    /* box-shadow: 28px 0px 111.35px 19.65px rgba(0, 0, 0, 0.11); */
+    left: -325px;
+    transition: .2s ease-in-out;
+}
+.menu-active{
+    left: 0;
+}
+.menu-active .menu-wrapper{
+    box-shadow: 28px 0px 111.35px 19.65px rgba(0, 0, 0, 0.11);
+}
+.menu-wrapper > .logo{
+    position: relative;
+    width: 100%;
+    height: 120px;
+    /* background: red; */
+    display: flex;
+    align-items: center;
+}
+.menu-elements{
+    position: relative;
+    /* background: red; */
+    width: 85%;
+    height: 100%;
+    margin-top: 60px;
+    margin-left: 40px;
+    margin-right: 30px;
+}
+.menu-elements > div{
+    margin-bottom: 50px;
+}
+.menu-elements > div > .head{
+    font-size: 14pt;
+    font-weight: 700;
+    letter-spacing: 0.5;
+    color: white;
+    margin-bottom: 30px;
+}
+.menu-element{
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 13pt;
+    font-weight: 600;
+    color: var(--color-secondaryBlack);
+    cursor: pointer;
+    transition: .3s;
+    margin-bottom: 23px;
+}
+
+.main-menu{
+    position: relative;
+    top: 50px;
+    transition: 1s;
+}
+.my-menu{
+    position: relative;
+    top: 70px;
+    transition: 1s;
+}
+.playlists-menu{
+    position: relative;
+    top: 90px;
+    transition: 1s;
+}
+ .menu-active .main-menu{
+    top: 0!important;
+    transition: .4s;
+} 
+ .menu-active .my-menu{
+    top: 0!important;
+    transition: .4s;
+} 
+.menu-active .playlists-menu{
+    top: 0!important;
+    transition: .4s;
+}
+
+.menu-active-element{
+    color: white;
+}
+.menu-element > img{
+    position: relative;
+    height: 27px;
+    width: 27px;
+    /* background: var(--color-secondaryBlack); */
+    filter: opacity(0.2);
+    margin-right: 20px;
+    border-radius: 5px;
+    transition: .3s;
+}
+.menu-element:hover > img{
+    filter: opacity(1);
+}
+.menu-active-element > img{
+    filter: opacity(1);
+}
+.menu-element:hover{
+    color: white;
+}
+.button-add-new{
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.button-add-new > span{
+    height: 28px;
+    width: 28px;
+    background: var(--color-lightRed);
+    color: var(--color-darkBlack);
+    border-radius: 100%;
+    margin-bottom: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14pt;
+    margin-right: 15px;
+}
+.button-add-new > p{
+    position: relative;
+    color: var(--color-lightRed);
+    font-weight: 500; 
+    margin-top: -20px;
+}

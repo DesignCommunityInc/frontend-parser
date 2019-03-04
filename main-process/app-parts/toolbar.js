@@ -13,7 +13,7 @@ ipcMain.on('setToolsList', (event, array)       => { tools = array })
 ipcMain.on('getSelectedTool', (event)           => { event.returnValue =  selectedTool })
 
 ipcMain.on('svgFilesRead', (event, args) => {
-    let svgFolder = './assets/svg/'
+    let svgFolder = './assets/svg/tools/'
     var arr = []
     fs.readdir(svgFolder, (err, files) => {
             files.forEach(file => {

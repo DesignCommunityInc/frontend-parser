@@ -2,6 +2,9 @@ const $ = require('jquery');
 const { ipcRenderer } = require('electron');
 const { BrowserWindow } = require('electron').remote;
 
+global.$ = $;
+global.__basedir = __dirname; // ***************
+
 let app = (function(){
     // private
     const appTitle = 'rins-app';

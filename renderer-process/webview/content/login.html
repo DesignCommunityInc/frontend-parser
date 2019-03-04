@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="css/standart.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/main-script_1.js"></script>
+    <script src="js/routing-script_1.js"></script>
+    <script src="js/ajax-reg-log.js"></script>
+    <title>Вход</title>
+</head>
+<body>
+    
+    <div class="wrapper">
+        <div class="main-state">
+            <div class="pages">
+                <div position-id="login" class="btn-nav-element btn-spn-bottom n-el-login">
+                    <p>вход</p>
+                    <span></span>
+                </div>
+                <div position-id="registration" class="btn-nav-element btn-spn-bottom n-el-registration">
+                    <p>регистрация</p>
+                    <span></span>
+                </div>
+                <div class="background-layer"></div>
+            </div>
+            <div class="forms-wrapper">
+                <div class="welcome-title">
+                    <div class="welcome-text">
+                        <h2>Добро пожаловать</h2>
+                        <p>Осталось только войти</p>
+                    </div>
+                </div>
+                <div class="forms-group">
+                    <div class="form-group f-g-log">
+                        <form class="login-form" method="POST" action>
+                            <div class="input">
+                                <p class="error-help">ошибка</p>
+                                <input id="user-login-log" name="user-login" type="text" placeholder="логин">
+                            </div>
+                            <div class="input">
+                                <p class="error-help">ошибка</p>
+                                <input id="user-pas-log" name="user-pass" type="password" placeholder="пароль">
+                            </div>
+                            <div class="control-buttons-form-login">
+                                <div id="login-button" class="button-reg-page">
+                                    <p>войти</p>        
+                                </div>     
+                            </div>
+                        </form>
+                    </div>
+                    <div class="form-group f-g-reg">
+                        <form class="registration-form" method="POST" action>
+                            <div class="input-fields">
+                                <div class="input">
+                                    <p class="error-help">ошибка</p>
+                                    <input id="user-login" name="user-login" type="text" placeholder="логин">
+                                </div>
+                                <div class="input">
+                                    <p class="error-help">ошибка</p>
+                                    <input id="user-email" name="user-pass" type="email" placeholder="email">
+                                </div>
+                            </div>
+                            <div class="input">
+                                <p class="error-help">ошибка</p>
+                                <input id="user-password" name="user-login" type="password" placeholder="пароль">
+                            </div>
+                            <div class="input">
+                                <p class="error-help">ошибка</p>
+                                <input id="user-password-re" name="user-pass" type="password" placeholder="повторите пароль">
+                            </div>
+                            <div class="personal-information">
+                                <div class="head">
+                                    <h2>Персональная информация</h2>
+                                    <p>Вы можете пропустить эти поля и заполнить их позже</p>
+                                </div>
+                            </div>
+                            <div class="control-buttons-form-login">
+                                <div id="registration-button" class="button-reg-page">
+                                    <p>регистрация</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="user-login-state">
+
+        </div>
+    </div>
+</body>
+</html>

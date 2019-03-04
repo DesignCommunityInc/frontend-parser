@@ -4,6 +4,8 @@
 @import "./app-parts/toolbar.css";
 @import "./app-parts/topbar.css";
 @import "./app-parts/webview.css";
+@import "./native-ui/menu.css";
+@import "./native-ui/ui-context.css";
 
 @font-face {
     font-family: 'Roboto';
@@ -51,9 +53,10 @@ body{
     display: flex;
     position: fixed;
     width: 100%;
-    height: 1000px;
+    height: 100%;
     margin-left: var(--tools-width);
     margin-top: calc(var(--header-height) + var(--border-size-default));
+    z-index: 100;
 }
 .preloader{
     display: none;

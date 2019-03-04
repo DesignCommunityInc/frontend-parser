@@ -1,11 +1,9 @@
 // const $ = require('jquery')
-const { ipcMain } = require('electron')
 const { ipcRenderer } = require('electron')
 
 let _process = process
 
 process.once('loaded', function(){
-    console.log(123);
     global.sendMainAsync = function(channel, sender){
         ipcRenderer.send(channel, sender)
     }

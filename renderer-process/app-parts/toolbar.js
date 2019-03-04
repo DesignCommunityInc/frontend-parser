@@ -1,4 +1,4 @@
-const $ = require('jquery')
+// const $ = require('jquery')
 let { ipcRenderer } = require('electron')
 // Object.defineProperty(Toolbar, 'constant1', {
 //     value: 33,

@@ -1,0 +1,22 @@
+ui-context{
+    display: block;
+    position: absolute;
+    border-radius: 10px;
+    background: var(--mainLightColor);
+    box-shadow: 0 0 30px -20px #323232;
+    overflow: hidden;
+}
+ui-context span{
+    display: block;
+    position: relative;
+    padding: 10px;
+}
+.ui-context-menu {
+    display: none;
+    top: 0;
+    left: var(--tools-width);
+    margin: 10px 0 0 10px;
+}
+.ui-context-menu:hover {
+    display: block
+}

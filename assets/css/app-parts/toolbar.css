@@ -6,7 +6,6 @@
     background: var(--mainColor);
     user-select: none;
     z-index: 100;
-    /* overflow: hidden; */
 }
 .tools object{
     display: block;

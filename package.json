@@ -25,6 +25,7 @@
     "jquery": "^3.3.1",
     "jquery-browserify": "^1.8.1",
     "jquery-mousewheel": "^3.1.13",
+    "website-scraper": "^4.0.0",
     "yepnope": "^1.1.0"
   }
 }

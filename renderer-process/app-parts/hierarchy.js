@@ -1,5 +1,5 @@
 /// При резком перемещении курсора на svg изменение ширины ломается (т.к. svg через документ)
-const $ = require('jquery')
+// const $ = require('jquery')
 let { ipcRenderer } = require('electron')
 
 $(document).ready(function(){
@@ -24,7 +24,7 @@ $(document).ready(function(){
     // mouseUp event
     $(document).mouseup(function(event){
         let e = event || window.event;
-        if(!tree.isAvailableResizing(e.pageX)) return;
+        // if(!tree.isAvailableResizing(e.pageX)) return;
         tree.allowToSize = false;
         tree.container[0].classList.remove('right-border-sizing'); 
     });

@@ -1,4 +1,4 @@
-const $ = require('jquery');
+// const $ = require('jquery');
 const { remote, ipcRenderer, BrowserWindow } = require('electron');
 
 let topbar = (function(){
@@ -40,6 +40,10 @@ let topbar = (function(){
             this.event();
         },
         event: function(){
+            $('.burger').on('click', function(){
+                document.getElementById('menu').classList.toggle('menu-opened');
+                // $('.shadow').fadeToggle(300);
+            });
             $(".tb-button").on('click', function(event){                
                 let name = this.id;
                 // topBar.action(name);

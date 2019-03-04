@@ -15,14 +15,12 @@
             height: 100vh;
         }
     </style>
-<body id="contentLoader">
-<!-- <form action="">
-    <input type="text" placeholder="Введите путь">
-</form> -->
+<body id="content-loader">
+    <button id="select-file"></button>
 </body>
 <script type="text/javascript">
-        require('../../renderer-process/events')
         require('../../renderer-process/webview/content-loader')
+        require('../../renderer-process/events')
         require("../../renderer-process/webview/webview")
         require('../../renderer-process/webview/selector')
         require('../../renderer-process/webview/dom-controller')

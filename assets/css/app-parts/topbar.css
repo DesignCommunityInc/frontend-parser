@@ -195,10 +195,13 @@
 }
 /* Burger */
 .burger{
+    cursor: pointer;
     display: inline-block;
     position: relative;
     width: var(--tools-width);
     height: var(--header-height);
+    -webkit-app-region: no-drag;
+    z-index: 101;
 }
 .burger span{
     display: block;

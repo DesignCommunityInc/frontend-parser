@@ -1,0 +1,209 @@
+.user-about-wrapper{
+    position: relative;
+    height: 570px;
+}
+.user-wallpaper{
+    position: absolute;
+    top: 0;
+    height: 570px;
+    width: 100%;
+    /* background: red; */
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    z-index: 0;
+}
+.background-layer{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: var(--color-backgroundColor);
+    opacity: 0.4;
+    top: 0;
+    z-index: 0;
+}
+.user-main-information{
+    position: relative;
+    display: flex;
+    width: 79%;
+    margin: 0 auto;
+    z-index: 1;
+    top: 290px;
+}
+.user-image{
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;  
+    height: 340px;
+    min-width: 250px;
+    border-radius: 1px;
+    margin: 0 15px;
+    margin-bottom: 40px;
+    transition: .3s;
+    overflow: hidden;
+}
+.user-inf{
+    position: relative;
+    margin-left: 20px;
+}
+.user-inf > .user-name{
+    position: relative;
+    width: fit-content;
+    font-size: 28pt;
+}
+.user-inf > .user-tags{
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: left;
+    /* max-width: 100%; */
+    flex-basis: auto;
+    margin: 10px 0;
+}
+.user-verification{
+    position: absolute;
+    height: 27px;
+    width: 27px;
+    border-radius: 100%;
+    background: var(--color-secondaryBlack);
+    top: -7px;
+    right: -15px;
+    opacity: 0.5;
+    transition:  opacity .3s;
+    cursor: pointer;
+}
+.user-verification:hover{
+    opacity: 0.9;
+}
+.user-description{
+    margin-top: 20px;
+    max-width: 670px;
+    height: 91px;
+    /* max-height: 80px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.user-description > p{
+    font-weight: 300;
+    color: white;
+    font-size: 13pt;
+}
+.user-action-panel{
+    position: relative;
+    display: flex;
+    height: 70px;
+    width: 100%;
+}
+.user-action-panel > *{
+    margin-right: 15px
+}
+.play{
+    position: relative;
+    height: 100%;
+    width: 37%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+}
+.play > span{
+    position: relative;
+    display: block;
+    width: 0; 
+    height: 0;
+    border-top: 9px solid transparent;
+    border-left: 18px solid rgb(255, 255, 255);
+    border-bottom: 9px solid transparent;
+    transition: .2s;
+  }
+.navigation-panel{
+    z-index: 1;
+    position: absolute;
+    bottom: 40px;
+    height: 60px;   
+    width: 70%;
+    display: flex;
+    margin-left: 300px;
+}
+
+/* ARTIST MAIN */
+
+.artist-top{
+    margin-top: 150px;
+}
+.top-greed{
+    margin-top: 20px;
+    position: relative;
+    text-align: center;
+}
+.top-greed .table-head{
+    width: 100%;
+    /* font-weight: 600; */
+    font-size: 15pt;
+    border-bottom: 2px solid var(--color-secondaryBlack);
+    color: var(--color-secondaryBlack)!important;  
+    background: var(--color-backgroundColor)!important; 
+}
+.top-greed .table-head td{
+    padding: 5px 0;
+    border-bottom: 2px solid var(--color-secondaryBlack);
+}
+
+.top-greed td{
+    padding: 18px 0px;
+}
+.top-list td{
+    font-size: 14pt;   
+    color: white; 
+    border-bottom: 2px solid var(--color-secondaryBlack);
+}
+.top-list td:nth-child(1){
+    font-weight: 600;
+    color: var(--color-secondaryBlack);
+}
+.top-first td{
+    font-size: 15pt;  
+    color: white;
+    border-bottom: 2px solid var(--color-lightRed);
+}
+.top-first td:nth-child(1){
+    font-weight: 600;
+    font-size: 17pt;
+    color: var(--color-lightRed)!important;
+}
+td img{
+    text-align: center;
+    position: relative;
+    height: 100%;width: 100%;
+    background: var(--color-secondaryBlack);
+}
+tr{
+    transition: .3s;
+    cursor: pointer;
+}
+tr td:nth-child(1){
+    transition: .3s;
+}
+tr:hover{
+    background: var(--color-secondaryBlack);
+}
+tr:hover td:nth-child(1){
+    color: white;
+}
+.top-greed tr td:nth-child(1){width: 10%;}
+.top-greed tr td:nth-child(2),.top-greed tr td:nth-child(3){width: 7%;}
+.top-greed tr td:nth-child(4),.top-greed tr td:nth-child(5){width: 20%;}
+.top-greed tr td:nth-child(6),.top-greed tr td:nth-child(7),.top-greed tr td:nth-child(8){width: 20%;}
+
+/* ALL SONGS */
+
+.all-songs{
+    margin-top: 110px; 
+}
+.all-songs-wrapper{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    margin-top: 40px;
+}

@@ -1,0 +1,166 @@
+
+html{
+    /* background-size: cover;  */
+    /* background-position: center; */
+    /* background-repeat: no-repeat; */
+    /* background-image: url(backgrounds/login.jpg);  */
+    width: 100%;
+    height: 100%;
+}
+body{
+    width: 100%;
+    height: 100%;
+    /* background-image: url("../style/backgrounds/login-wallpaper.jpg"); */
+    background: linear-gradient(145deg,#3C3C42, #FF5267);
+    background-repeat: no-repeat;
+    background-size: cover;  
+    background-position: left; 
+}
+.wrapper{
+    max-width: 450px;
+    margin: 0; 
+    position: relative;
+    border-radius: 2px;
+    z-index: 1;
+    padding-top: 60px;
+    margin: 0px auto;
+    transition: .3s;
+    overflow: hidden!important;
+}
+.wrapper-login{
+    max-width: 450px!important; 
+}
+
+.wrapper-registration{
+    max-width: 850px!important; 
+}
+.logo{
+    height: 80px;
+    width: 60px;
+    margin-right: 30px;
+}
+.welcome-title{
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-top: 80px; 
+    max-width: 550px;
+    border-radius: 2px;
+}
+.welcome-text > h2{
+    font-size: 26pt;
+}
+.welcome-text > p{
+    margin-top: 5px;
+    font-size: 16pt;
+    color: var(--color-secondaryBlack);
+}
+.forms-wrapper{
+    padding: 0px 0px 0px 50px ;
+    height: 730px;
+    position: relative;
+    background: var(--color-backgroundColor);
+    border-radius: 3px;
+}
+.login-form{
+    margin-top: 90px;
+}
+.registration-form{
+    margin-top: 50px;
+}
+.login-form .input{
+    margin-top: 35px;
+}
+.pages{
+    position: relative;
+    height: 50px;   
+    max-width: 330px;
+    display: flex;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    /* overflow: hidden; */
+}
+.pages > .btn-nav-element{
+    font-size: 13.5pt;
+    margin: 0px 10px;
+    padding: 15px 25px;
+    z-index: 1;
+}
+.pages > .btn-nav-element > span{
+    height: 2.7px;
+}
+form > .input-fields{
+    position: relative;
+    /* margin-top: 50px; */
+    display: flex;
+    direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.input{
+    position: relative;
+    margin-right: 35px;
+    margin-bottom: 20px;
+}
+.forms-group{
+    position: relative;
+    width: 1300px;
+    height: 550px;
+    transition: .3s;
+    transform: translateX(-960px);
+}
+.forms-group-login{
+    transform: translateX(-960px);
+}
+.forms-group-registration{
+    transform: translateX(0px);
+}
+.forms-group > .f-g-log{
+    position: relative;
+    float: right;
+}
+.forms-group > .f-g-reg{
+    position: relative;
+    float: left;
+}
+.control-buttons-form-login{
+    top: 480px;
+    position: absolute;
+    display: flex;
+}
+.button-reg-page{
+    position: relative;
+    background: var(--color-lightRed);
+    cursor: pointer;
+    border-radius: 3px;
+}
+.button-reg-page > p{
+    padding: 15px 50px;
+    color: white;
+    font-weight: bold;
+}
+.loading-wrapper{
+    /* top: 0px!important; */
+    height: 49px;
+    width: 49px;
+    margin-left: 5px;
+    /* right: 50px; */
+    /* left: 55px; */
+    position: relative;
+}
+
+/* REGISTRATION */
+.personal-information{
+    margin-top: 50px;
+}
+.personal-information > .head{
+    position: relative;
+}
+.personal-information > .head > h2{
+    font-size: 18pt;
+}
+.personal-information > .head > p{
+    color: var(--color-secondaryBlack);
+    font-size: 14pt;
+}
