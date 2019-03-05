@@ -4,7 +4,7 @@ $(document).ready(function () {
     if(activeNavElement == null){
         history.replaceState({}, '', location.href + '/' + 'main');    
     }else if(activeNavElement == ''){
-        history.replceState({pageTitle: "Dsound - Petit Biscuit"}, location.href +'/',"main");
+        history.replaceState({pageTitle: "Dsound - Petit Biscuit"}, location.href +'/',"main");
     }
 
 });

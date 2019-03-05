@@ -66,7 +66,7 @@ $(function () {
                         $(response["error"]['error-field']).addClass('error-input');
                         errorViewAnimation($(response["error"]['error-field']), 'view', response["error"]['message']);
                     }else{
-                        history.pushState({pageTitle: ""}, location.href + '/',  'login');
+                        history.replaceState({pageTitle: ""}, location.href + '/',  'login');
                         $('.forms-group').removeClass('forms-group-registration');
                         $('.forms-group').addClass('forms-group-login');
                         $('.wrapper').removeClass('wrapper-registration');

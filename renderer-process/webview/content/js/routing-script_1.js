@@ -43,7 +43,7 @@ $(document).ready(function () {
 
     $('.btn-nav-element').click(function(){
         var elementPosition =  $(this).attr("position-id");
-        history.pushState({'active-nav-element': menuCategories[elementPosition][3],  pageTitle: ""}, location.href + '/',  menuCategories[elementPosition][3]);
+        history.replaceState({'active-nav-element': menuCategories[elementPosition][3],  pageTitle: ""}, location.href + '/',  menuCategories[elementPosition][3]);
         changeEvent(elementPosition);
     });
 });

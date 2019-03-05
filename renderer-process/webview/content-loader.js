@@ -64,7 +64,7 @@ let __basedir = (`${__dirname}`).replaceAll('\\', '/');
 
 
 
-// let websiteUrl = 'http://smart-home.h1n.ru';
+// let websiteUrl = 'http://   .ru';
 
 // let options = {
 //     urls: [websiteUrl],
