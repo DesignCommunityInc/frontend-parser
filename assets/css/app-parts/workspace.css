@@ -1,0 +1,41 @@
+.workspace{
+    display: block;
+    position: relative;
+    margin-right: var(--tools-width);
+    left: 0;
+    height: calc(100% - var(--header-height));  
+    width: 100%;
+    z-index: 10;
+}
+.webview{
+    display: inline-flex;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+}
+.backward{
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    width: 40px;
+    height: 25px;
+    top: -30px;
+    left: 0;
+    padding: 0 20px 0 15px;
+    background: var(--mainColor);
+    border-radius: 0 0 30px 0;
+    font-size: 8pt;
+    line-height: 25px;
+    color: var(--mainDarkColor);
+    border: var(--border-size-default) solid var(--resColor);
+    border-left: none;
+    border-top: none;
+    transition: var(--transition-normal);
+}
+.backward-active{
+    top: 0;
+    transition: var(--transition-normal);
+}

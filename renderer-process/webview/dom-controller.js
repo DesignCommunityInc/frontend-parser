@@ -14,7 +14,7 @@ $(document).ready(function() {
     });
 
     $(window).mouseup(function(e){
-        domController.addNode();
+        domController.resetTempStyles();
     });
 });
 
@@ -29,13 +29,13 @@ class DOMController {
     }
     init(){
         this.tempDivision.element = document.createElement('div');              // Create block for selection tool 
-        this.tempDivision.element.classList.add('tmpDiv');                      // and add       
+        this.tempDivision.element.classList.add('tmpDiv');                      // and add      
         this.render();
     }
     render(){
         sendMainAsync('onHierarchyCreated', this.treeConstructor(document.documentElement, true));   // Create tree of DOM nodes 
         // $(this.tempDivision.element).load('../../sections/native-ui/tempDivision.html');                // Load html component (div)
-        console.log(this.dom);
+        // console.log(this.dom);
         this.IPC();                                                                                     // After rendering call events()
     } 
     IPC(){
@@ -46,13 +46,14 @@ class DOMController {
             });
         });
         addRendererListener('element:mouseenter-message', (event, sender) => {
-            console.log('[key="'+`${sender}`+'"]');
+            // console.log('[key="'+`${sender}`+'"]');
             let element = document.querySelector('[key="'+`${sender}`+'"]');
             this.tempSelector = element.style.border;
+            // console.log(element);
             element.classList.add('hover-outline');
         });
         addRendererListener('element:mouseleave-message', (event, sender) => {
-            console.log('[key="'+`${sender}`+'"]');
+            // console.log('[key="'+`${sender}`+'"]');
             let element = document.querySelector('[key="'+`${sender}`+'"]');
             element.classList.remove('hover-outline');
         });
@@ -60,34 +61,39 @@ class DOMController {
     
     // FUNCTIONS
     setSelectionMouseStartPos(e) {
+        document.body.append(this.tempDivision.element); 
         this.tempDivision.mouseStartPos = { x: e.pageX, y: e.pageY };
     }
     setSelectionArea(e) {
+        // console.log(this.tempDivision.element);
         let selectedTool = sendMainSync('getSelectedTool');
         if(selectedTool !== -1){
-            $('body').append(this.tempDivision.element);
             window.getSelection().removeAllRanges();
-            sendMainAsync('getSelectionArea', { alignment: e.shiftKey, pageX: e.pageX, pageY: e.pageY, startX: this.tempDivision.mouseStartPos.x, startY: this.tempDivision.mouseStartPos.y, offsetX: $(this.tempDivision.element).offset().left, offsetY: $(this.tempDivision.element).offset().top });
+            sendMainAsync('getSelectionArea', { alignment: e.shiftKey, pageX: e.pageX, pageY: e.pageY, startX: this.tempDivision.mouseStartPos.x, startY: this.tempDivision.mouseStartPos.y, offsetX: $(this.tempDivision.element).offset().left, offsetY: $(this.tempDivision.element).offset().top, scrollTop: document.documentElement.scrollTop });
             if(selectedTool === 2) $(this.tempDivision.element).css({'border-radius': '50%'});
         }
     }
     resetTempStyles() {
-        Object.keys(this.tempDivision.element.style).forEach(key => {
-            this.tempDivision.element.style[key] = "";
-        })
-        $(this.tempDivision.element).remove();
+        // Object.keys(this.tempDivision.element.style).forEach(key => {
+        this.tempDivision.element.style.width = "0px";
+        this.tempDivision.element.style.height = "0px";
+        this.tempDivision.element.style.top = "0px";
+        this.tempDivision.element.style.bottom = "0px";
+        // })
+        document.body.removeChild(this.tempDivision.element);
+        // $(this.tempDivision.element).remove();
     }
     addNode() { 
-        let node = this.tempDivision.element;
+        let node = this.tempDivision.element; // тута удалить el
         let el = document.createElement('div');
         let matches = ['width', 'height', 'left', 'top', 'border', 'borderRadius'];
-        el.style.position = 'fixed';
+        // el.style.position = 'fixed';
         Object.keys(node.style).forEach((key, i) => {
             if(matches.indexOf(key) !== -1)
             el.style[key] = getComputedStyle(node)[key];
         });
         this.resetTempStyles();
-        $('body').append(el);
+        document.body.append(el);
     }
     keyGenerator(length) {
         let ret = "";

@@ -8,9 +8,7 @@ $(document).ready(function(){
 
     $(document).on("mousemove", function(event){
         let e = event || window.event;
-        tree.addResizingStyles(
-            tree.isAvailableResizing(e.pageX)
-        );
+        tree.addResizingStyles(tree.isAvailableResizing(e.pageX));
         if(e.buttons !== 1) return;      
         tree.resize(e.pageX);
     });
@@ -24,16 +22,35 @@ $(document).ready(function(){
     // mouseUp event
     $(document).mouseup(function(event){
         let e = event || window.event;
-        // if(!tree.isAvailableResizing(e.pageX)) return;
         tree.allowToSize = false;
         tree.container[0].classList.remove('right-border-sizing'); 
     });
     // mouseClick event
-    $(document).on('click', '.branch > .h-item-child-container', function(event){
+    $(document).on('dblclick', '.branch > .h-item-child-container', function(event){
         let e = event || window.event;
         e.stopPropagation();
-        $(this).parent().toggleClass('branch-show');
+        this.parentNode.classList.toggle('branch-show');
     });
+    let tmp = document.body;
+    $(document).on('click', '.branch', function(event){
+        let e = event || window.event;
+        e.stopPropagation();
+        console.log(document.getElementsByClassName('branch-active'));
+        this.classList.add('branch-active');
+        if(tmp !== this) {
+            tmp.classList.remove('branch-active');
+            tmp = this;
+        }
+    });
+    // $(document).on('mouseenter', '.branch', function(event){
+    //     let e = event || window.event;
+    //     e.stopPropagation();
+    //     this.classList.add('branch-mouseover');
+    //     if(tmp !== this) {
+    //         tmp.classList.remove('branch-mouseover');
+    //         tmp = this;
+    //     }
+    // });
     $(document).on('mouseenter', '.h-item-child-container', function(){
         let key = this.getAttribute('key');
         if(key === null) return;

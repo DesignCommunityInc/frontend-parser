@@ -3,7 +3,7 @@
 @import "./app-parts/hierarchy.css";
 @import "./app-parts/toolbar.css";
 @import "./app-parts/topbar.css";
-@import "./app-parts/webview.css";
+@import "./app-parts/workspace.css";
 @import "./native-ui/menu.css";
 @import "./native-ui/ui-context.css";
 
@@ -49,6 +49,9 @@ body{
     position: relative;
     background: var(--resColor);
 }
+.none{
+    display: none;
+}
 .flex-container{
     display: flex;
     position: fixed;
@@ -56,23 +59,24 @@ body{
     height: 100%;
     margin-left: var(--tools-width);
     margin-top: calc(var(--header-height) + var(--border-size-default));
-    z-index: 100;
+    z-index: 10;
 }
 .preloader{
-    display: none;
+    display: block;
     position: absolute;
     visibility: visible;
     opacity: 1;
     width: 100%;
     height: 100%;
     background: var(--mainLightColor);
+    transition: var(--transition-fast);
     z-index: 999;
 }
 .preloader > img{
     display: block;
     position: relative;
-    height: 12vh;
-    top: 40vh;
+    height: 8vh;
+    top: 42vh;
     margin: 0 auto;
 }
 .preloader_loaded{

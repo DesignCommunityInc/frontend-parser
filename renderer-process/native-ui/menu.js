@@ -2,14 +2,8 @@
 
 $(document).ready(function(){
     let menu = new Menu();
-
-
 });
-addRendererListener('selected-file', (event, sender) => {
-    console.log(sender[0]);
-    $('.webview')[0].loadURL(`${sender[0]}`);
-    // $('.webview')[0].reload();
-});
+
 class Menu {
     constructor(){
         this.nameSpace = {
@@ -18,19 +12,19 @@ class Menu {
             context: 'ui-context-menu'
         }
         this.container = document.getElementById(this.nameSpace.menu);
-        this.fields = [];
-        this.init();
-    }
-
-    init(){
-        let field = {
+        this.fields = [{
             title: './assets/svg/file.svg',
             children: [{
-                title: 'Open',
-                event: 'open-file-dialog'
+                title: 'create',
+                event: 'open-file-dialog',
+                sender: 'openDirectory'
+            },{
+              title: 'open',
+              event: 'open-file-dialog',
+              sender: 'openFile'
             }]
-        };
-        this.fields.push(field);
+        }];
+
         this.render();
     }
     render(){

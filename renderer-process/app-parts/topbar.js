@@ -75,8 +75,8 @@ let topbar = (function(){
             })
           
             ipcRenderer.on('set-page-title-reply', function(event, title){
-                $('.project-name').text(`${title}`)
-                console.log(`${title}`)
+                document.getElementById('project-name').innerHTML = `${title}`;
+                console.log(title);
             })
         }
     }

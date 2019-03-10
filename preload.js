@@ -6,7 +6,9 @@
 const { ipcRenderer } = require('electron')
 
 let _process = process
-
+process.once('document-start', () => {
+    console.log('this is the document start event');
+})
 process.once('loaded', function(){
     global.sendMainAsync = function(channel, sender){
         ipcRenderer.send(channel, sender)

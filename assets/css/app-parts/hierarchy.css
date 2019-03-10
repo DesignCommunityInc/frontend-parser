@@ -11,7 +11,7 @@
     border-left: var(--border-size-default) solid var(--resColor);
     border-right: var(--border-size-default) solid var(--resColor);
     overflow-x: hidden;
-    z-index: 100;
+    z-index: 11;
 }
 .h-container{
     display: block;
@@ -37,8 +37,7 @@
 }
 .h-item{
     list-style: none;
-    margin-left: -20px;
-    padding-left: 40px!important;
+    padding-left: 20px;
     cursor: pointer;
     width: 100%;
     user-select: none;    
@@ -50,9 +49,10 @@
     cursor: pointer;
     width: 100%;
     user-select: none;
-    max-height: calc(var(--h-item-height) + var(--h-item-child-container-border-width) * 2);
-    transition: var(--transition-fast);
+    height: calc(var(--h-item-height) + var(--h-item-child-container-border-width) * 2);
+    background: transparent;
     overflow: hidden;
+    /* transition: var(--transition-fast); */
 }
 .branch::before{
     position: absolute;
@@ -61,29 +61,24 @@
     color: var(--resColor);
     font-size: 6pt;
     line-height: calc(var(--h-item-height) + var(--h-item-child-container-border-width) * 2);
+    transition-property: color;
+    transition: var(--transition-fast);
 }
 .branch-show{
-    max-height: 9999px;
-    border-radius: 10px;
-    /* box-shadow: 40px -1px 0px .5px var(--resColor); */
-    /* background: var(--mainLightColor); */
+    height: auto;
 }
 .branch-show::before {
     content: '◢'!important;
 }
-/* .branch-show .h-item-child-container{
-    border-color: var(--mainLightColor);
-} */
 .h-item-child-container{
-    border-width: var(--h-item-child-container-border-width); 
-    border-style: solid;
-    border-color: var(--mainColor);
-    transition-property: border; 
+    background: transparent;
+    margin: var(--h-item-child-container-border-width) 0;
+    text-transform: lowercase;
     transition: var(--transition-fast);
-    /* text-transform: uppercase; */
 }
 .h-item-child-container:active{
     transform: scale(0.99);   
+    transition: var(--transition-fast);
 }
 .h-item-type{
     display: inline-block;
@@ -91,59 +86,71 @@
     height: var(--h-item-height);
     vertical-align: top;
 }
+.h-item-child-container:nth-child(n){
+    white-space: nowrap;
+    font-weight: bold;
+    filter: sepia(.40);
+    transition: var(--transition-fast) filter;
+}
 .h-item-type{
     --param: 22px;
     --type-height: calc(var(--h-item-height) - var(--param));
-    width: var(--type-height);
     height: var(--type-height);
+    width: var(--type-height);
     margin-left: var(--type-height);
     margin-right: var(--type-height);
     top: calc(var(--param) * 0.5);
-    font-size: 7.5px;
     vertical-align: center;
-    font-weight: bold;
     text-transform: uppercase;
     color: var(--darkColor);
-    white-space: nowrap;
-    filter: sepia(.40);
+    font-size: 5pt;
 }
 .h-item-blockname,
 .h-item-id,
 .h-item-classname,
 .h-item-href {
+    font-size: 7.5pt;
     height: var(--h-item-height);
     margin-left: 5px;
     line-height: var(--h-item-height);
-    font-size: 7.5pt;
-    font-weight: bold;
     text-align: left;
-    white-space: nowrap;
-    filter: sepia(.40);
-    transition: var(--transition-fast) filter;
 }
-.branch-hover{
-    background: var(--mainLightColor);
-    border-color: var(--mainLightColor);
-    transition: var(--transition-fast);
-}
-.branch-hover .h-item-child-container{
-    border-color: var(--mainLightColor);
-    transition: var(--transition-fast);
-}
-.h-item-child-container:hover{
-    background-color: linear-gradient(to right, var(--mainColor), transparent 50%)!important;
-    transition-property: background-color, border;
-    transition: var(--transition-fast);
-}
-.branch-hover::before{
+.branch:hover::before{
     color: var(--mainDarkColor);
-    transition-property: color;
     transition: var(--transition-fast);
 }
-.branch-hover .h-item-blockname,
-.branch-hover .h-item-id,
-.branch-hover .h-item-classname,
-.branch-hover .h-item-href{
+.branch-mouseover,
+.branch-active{
+    background: linear-gradient(to left, var(--mainLightColor) 90%, var(--mainColor));
+    border-color: var(--mainLightColor);
+    transition: var(--transition-fast);
+}
+.branch-mouseover::before,
+.branch-active::before{
+    color: var(--mainDarkColor);
+    transition: var(--transition-fast);
+}
+/* .branch .h-item-child-container:hover{
+    background: linear-gradient(to right, var(--mainLightColor), transparent 50%);
+    transition-property: background;
+    transition: var(--transition-fast);
+} */
+.branch-mouseover .h-item-child-container:hover,
+.branch-active .h-item-child-container:hover{
+    /* background: linear-gradient(to left, var(--mainColor), var(--mainLightColor) 50%); */
+    background: linear-gradient(to left, var(--mainLightColor) 75%, var(--mainColor));
+    /* !important */
+    transition-property: background;
+    transition: var(--transition-fast);
+}
+.branch-mouseover .h-item-blockname,
+.branch-mouseover .h-item-id,
+.branch-mouseover .h-item-classname,
+.branch-mouseover .h-item-href,
+.branch-active .h-item-blockname,
+.branch-active .h-item-id,
+.branch-active .h-item-classname,
+.branch-active .h-item-href{
     filter: sepia(0);
     transition-property: filter;
     transition: var(--transition-fast);

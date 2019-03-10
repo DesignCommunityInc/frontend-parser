@@ -17,6 +17,7 @@ var menuCategories = {
 }
 
 $(document).ready(function () {
+    alert('main-script-upload');
     $('.btn-nav-element').click(function(){
         var elementPosition =  $(this).attr("position-id");
         history.replaceState({'active-nav-element': menuCategories[elementPosition][3],  pageTitle: "Dsound - Petit Biscuit"}, location.href + '/',  menuCategories[elementPosition][3]);

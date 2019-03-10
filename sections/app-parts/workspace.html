@@ -1,0 +1,11 @@
+<template class="task-template">
+    <section class="workspace">
+        <div class="preloader"><img src="./assets/gif/preloader.gif"></div>
+        <webview class="webview" id="webview" preload="./webview-preload.js" src="./renderer-process/webview/content/index.html" 
+            name="workspace" autosize="on" minwidth="600" minheight="1000" nodeintegration></webview>
+        <div class="backward" id="backward">Go back</div>
+    </section>
+    <script type="text/javascript">
+       require('./renderer-process/content-loader')
+    </script>
+</template>
