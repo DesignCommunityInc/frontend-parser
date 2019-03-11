@@ -1,5 +1,3 @@
-const { ipcMain } = require('electron');
-
 $(document).ready(function() {
     
     let domController = new DOMController();
@@ -19,8 +17,22 @@ $(document).ready(function() {
         let e = event || window.event;
         domController.resetTempStyles();
     });
-});
 
+        
+    getStyle('.first-view');
+    console.log(window.getComputedStyle(document.getElementsByClassName('first-view')[0]));
+});
+function getStyle(className) {
+    let css = document.styleSheets;
+    Array.prototype.forEach.call(css, style => {
+        let classes = style.rules || style.cssRules;
+        for (var x = 0; x < classes.length; x++) {
+            if (classes[x].selectorText == className) {
+                (classes[x].cssText) ? console.log(classes[x].cssText) : console.log(classes[x].style.cssText);
+            }
+        }
+    });
+}
 class DOMController {
     constructor(){
         this.tempDivision = {

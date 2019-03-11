@@ -1,7 +1,7 @@
 ui-context{
     display: block;
     position: absolute;
-    border-radius: 10px;
+    border-radius: 5px;
     background: var(--mainLightColor);
     box-shadow: 0 0 30px -20px #323232;
     overflow: hidden;
@@ -10,6 +10,15 @@ ui-context span{
     display: block;
     position: relative;
     padding: 10px;
+    font-size: 8pt;
+    font-weight: bold;
+    color: var(--mainDarkColor);
+    transition: var(--transition-fast);
+}
+ui-context span:hover{
+    transform: scale(1.1);
+    color: var(--darkColor);
+    transition: var(--transition-fast);
 }
 .ui-context-menu {
     display: none;

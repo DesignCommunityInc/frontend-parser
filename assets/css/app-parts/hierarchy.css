@@ -74,9 +74,11 @@
     background: transparent;
     margin: var(--h-item-child-container-border-width) 0;
     text-transform: lowercase;
+    outline: 1px solid transparent;
     transition: var(--transition-fast);
 }
 .h-item-child-container:active{
+    outline-color: var(--hoverBlueColor);
     transform: scale(0.99);   
     transition: var(--transition-fast);
 }
@@ -92,6 +94,16 @@
     filter: sepia(.40);
     transition: var(--transition-fast) filter;
 }
+
+/* .h-item-child-container::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    margin-left: -30px;
+    height: var(--h-item-height);
+    background: transparent;
+    z-index: -1;
+} */
 .h-item-type{
     --param: 22px;
     --type-height: calc(var(--h-item-height) - var(--param));
@@ -121,6 +133,7 @@
 }
 .branch-mouseover,
 .branch-active{
+    filter: sepia(0);
     background: linear-gradient(to left, var(--mainLightColor) 90%, var(--mainColor));
     border-color: var(--mainLightColor);
     transition: var(--transition-fast);
@@ -130,17 +143,19 @@
     color: var(--mainDarkColor);
     transition: var(--transition-fast);
 }
-/* .branch .h-item-child-container:hover{
-    background: linear-gradient(to right, var(--mainLightColor), transparent 50%);
-    transition-property: background;
+.branch .h-item-child-container:hover{
+    filter: sepia(0);
+    background: var(--mainLightColor);
     transition: var(--transition-fast);
-} */
+}
+.branch-mouseover .h-item-child-container,
+.branch-active .h-item-child-container{
+    filter: sepia(0);
+    transition: var(--transition-fast);    
+}
 .branch-mouseover .h-item-child-container:hover,
 .branch-active .h-item-child-container:hover{
-    /* background: linear-gradient(to left, var(--mainColor), var(--mainLightColor) 50%); */
-    background: linear-gradient(to left, var(--mainLightColor) 75%, var(--mainColor));
-    /* !important */
-    transition-property: background;
+    background: var(--mainColor);
     transition: var(--transition-fast);
 }
 .branch-mouseover .h-item-blockname,
