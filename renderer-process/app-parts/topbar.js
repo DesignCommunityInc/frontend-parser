@@ -33,8 +33,8 @@ let topbar = (function(){
         },
         render: function(){
             // Потом вынести нужно кнопки панели
-            $.each(topBar.scale.values, function(i, v){          // Adding zoom values to 
-                topBar.scale.this.append("<li id='sv" + i + "'>" + v * 100 + "%</li>")
+            Array.prototype.forEach.call(topBar.scale.values, (i, v) => {          // Adding zoom values to 
+                topBar.scale.this.append("<li id='sv" + v + "'>" + i * 100 + "%</li>")
             }, console.log('--scale-setup'));                    // scale list (export values to html)
 
             this.event();

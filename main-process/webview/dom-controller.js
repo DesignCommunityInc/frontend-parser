@@ -12,7 +12,7 @@ let win = null;
 // ipcMain.on('drawRectangle', (event, pos) => {
 //     win.webContents.send('', pos);
 // }) 
-ipcMain.once('onHierarchyCreated', (event, sender) => {
+ipcMain.on('onHierarchyCreated', (event, sender) => {
     let win
     Array.prototype.forEach.call(BrowserWindow.getAllWindows(), (window) => {
         if (window.getTitle() == 'rins-app') 
@@ -22,7 +22,7 @@ ipcMain.once('onHierarchyCreated', (event, sender) => {
 })
 
 ipcMain.on('getSelectionArea', (event, sender) => {
-    let scrollTop = sender.scrollTop;
+    // let scrollTop = sender.scrollTop;
     let alignment = sender.alignment
     let mouseStartPos = { x: sender.startX, y: sender.startY }
     let left = 0, width = 0, height = 0, top = 0
@@ -53,7 +53,7 @@ ipcMain.on('getSelectionArea', (event, sender) => {
         left += (sender.pageX - mouseStartPos.x < 0) ? mouseStartPos.x - (left + width) : 0
         top += (sender.pageY - mouseStartPos.y < 0) ? mouseStartPos.y - (top + height) : 0
     }
-    top -= scrollTop;
+    // top += scrollTop;
     event.sender.send('getSelectionArea-reply', { left: left, width: width, height: height, top: top })
 })
 

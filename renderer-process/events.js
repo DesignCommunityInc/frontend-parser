@@ -24,6 +24,6 @@ let { ipcRenderer } = require("electron")
     })
 // })
 
-ipcRenderer.on('log', (event, sender) => {
-    console.log(sender)
-})
+// ipcRenderer.on('log', (event, sender) => {
+//     console.log(sender)
+// })

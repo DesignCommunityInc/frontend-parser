@@ -31,15 +31,14 @@ $(document).ready(function(){
         e.stopPropagation();
         this.parentNode.classList.toggle('branch-show');
     });
-    let tmp = document.body;
     $(document).on('click', '.branch', function(event){
         let e = event || window.event;
         e.stopPropagation();
         console.log(document.getElementsByClassName('branch-active'));
         this.classList.add('branch-active');
-        if(tmp !== this) {
-            tmp.classList.remove('branch-active');
-            tmp = this;
+        if(tree.temporaryActive !== this) {
+            tree.temporaryActive.classList.remove('branch-active');
+            tree.temporaryActive = this;
         }
     });
     // $(document).on('mouseenter', '.branch', function(event){
@@ -81,8 +80,10 @@ class Tree {
     // private local variables
     constructor(){
         this.classNameSpace = {
+            sectionClass: 'hierarchy',
             containerClass: 'h-container',
             elementClass: 'h-item',
+            branchClass: 'branch',
             itemElementClass: 'h-item-child-container',
             itemElementTypeClass: 'h-item-type',
             itemElementNameClass: 'h-item-blockname',
@@ -91,13 +92,14 @@ class Tree {
             itemElementHrefClass: 'h-item-href'
         };
         this.container = null;
+        this.temporaryActive = document.body;
         this.maxCursorPos = null;
         this.minCursorPos = null;
         this.allowToSize = false,
         this.margin = null;
         this.widthCash = null;
         this.dom = [];
-        this.tree = null;
+        // this.tree = null;
 
         this.init();
     }
@@ -114,10 +116,18 @@ class Tree {
     }
     async IPCAsync(){
         ipcRenderer.on('onHierarchyCreated-reply', (event, sender) => {
-            sender.forEach(element => {
-                this.tree = this.treeRenderer(element);
-                this.container.find(`.${this.classNameSpace.containerClass}`).append(this.tree);
+            console.log(sender.filter(element => element.node.b_blockName.match(/[\bBODY\b\bHEAD\b]/)));
+            sender.filter(element => element.node.b_blockName.match(/\b(?:BODY|HEAD)\b/)).forEach(element => {
+                let tree = this.treeRenderer(element);
+                if(element.node.b_blockName === 'BODY'){
+                    tree.classList.add('branch-show', 'branch-active');
+                    this.temporaryActive = tree;
+                }
+                this.container.find(`.${this.classNameSpace.containerClass}`).append(tree);
             });
+        });
+        ipcRenderer.on('clear-tree-reply', (event, sender) => {
+            this.clearTree();
         });
         ipcRenderer.on('ctrl+Y', (event, sender) => {
             let w = (this.container.width() !== 0) ? 0 : this.widthCash;
@@ -131,7 +141,6 @@ class Tree {
     }
 
     // FUNCTIONS
-
     invalidate() {
         this.maxCursorPos = this.container.width() + 5 + this.margin; // hierarchy diapason width max _d -> diapason
         this.minCursorPos = this.container.width() - 5 + this.margin; // hierarchy diapason width min
@@ -160,12 +169,13 @@ class Tree {
         else
             $(document).trigger("mouseup");
     }
-    // element_MouseLeave(key){
-    //     let key = this.getAttribute('key');
-    //     if(key === null) return;
-    //     // WEBVIEW
-    //     document.getElementsByTagName('webview')[0].send('element:mouseleave-message', key);
-    // }
+    clearTree(){
+        let node = document.getElementsByClassName(`${this.classNameSpace.containerClass}`)[0];
+        while (node.firstChild) {
+        console.log(node.firstChild)
+            node.removeChild(node.firstChild);
+        }
+    }
     // TREE RENDERER FUNCTION 
     treeRenderer(list){
         let container = document.createElement('ul');   // creating parent
@@ -187,7 +197,7 @@ class Tree {
         return container;
     }
     listItemCreator(node) {
-        let textNodes = /\b(?:P|A|STRONG|SUB|SUP)\b/;
+        let textNodes = /\b(?:P|A|STRONG|SUB|SUP|H)\b/;
         let child = document.createElement('li');
         child.classList.add(this.classNameSpace.itemElementClass);
         Object.keys(node).forEach(key => {
