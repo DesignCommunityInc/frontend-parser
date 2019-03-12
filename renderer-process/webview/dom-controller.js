@@ -4,7 +4,14 @@ $(document).ready(function() {
 
     window.addEventListener('mousedown', function(event){
         let e = event || window.event;
-        domController.setSelectionMouseStartPos(e);
+        if(e.buttons === 1){
+            domController.setSelectionMouseStartPos(e);
+            return false;
+        }
+        if(e.buttons === 3){
+            domController.showContext('cssRules');
+            return false;
+        }        
     });
 
     $(window).on('mousemove', function(event) {

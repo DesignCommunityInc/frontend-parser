@@ -123,6 +123,15 @@
     border-radius: 100%;
     z-index: 2;
 }
+/* .user-group-assoc{
+    z-index: 1;
+    position: absolute;
+    background: red;
+    border-radius: 100%;
+    left: 12px;
+    height: 51px;
+    width: 51px;
+} */
 .user-name{
     color: white;
     font-size: 13pt;

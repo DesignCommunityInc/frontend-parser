@@ -31,21 +31,24 @@ class ContentLoader {
         });
     }
     async render(){
+        // this.downloadWEBContent('http://smart-home.h1n.ru/', './renderer-process/webview/content');
         let wv = this.webview;
         await this.IPCAsync();
         this.addPreloaders();
         ipcRenderer.send('clear-tree-message');
-        wv.executeJavaScript(`require('${this.__path}/renderer-process/webview/webview')`);
-        wv.executeJavaScript(`require('${this.__path}/renderer-process/webview/dom-controller')`);
-        wv.addEventListener('dom-ready', () => { // DOM-READY EVENT 
-            ipcRenderer.send('set-page-title', wv.getTitle());
+        wv.addEventListener('did-stop-loading', () => { // did-stop-loading EVENT 
             this.removePreloaders();
-            this._canGoBack();
-            wv.insertCSS('.tmpDiv{position: absolute;border: 1px solid #1E90FF;border-radius: 2px;background: rgba(30, 144, 255, .2);z-index:1000000;}');
-            wv.insertCSS('.hover-outline{outline: 2px dotted rgba(30, 144, 255, 0.6);transition:0.4s ease-in-out outline-color;}');
-            $(wv).mouseover(function(){
-                wv.contentWindow.focus();
-            });   
+            wv.executeJavaScript(`require('${this.__path}/renderer-process/webview/webview')`);
+            wv.executeJavaScript(`require('${this.__path}/renderer-process/webview/dom-controller')`);
+            // wv.addEventListener('dom-ready', () => { // DOM-READY EVENT 
+                ipcRenderer.send('set-page-title', wv.getTitle());
+                this._canGoBack();
+                wv.insertCSS('.tmpDiv{position: absolute;border: 1px solid #1E90FF;border-radius: 2px;background: rgba(30, 144, 255, .2);z-index:1000000;}');
+                wv.insertCSS('.hover-outline{outline: 2px dotted rgba(30, 144, 255, 0.6);transition:0.4s ease-in-out outline-color;}');
+                $(wv).mouseover(function(){
+                    wv.contentWindow.focus();
+                });  
+            // });  
         });
         return false;
     }
@@ -130,7 +133,7 @@ class ContentLoader {
             urlFilter: function (_url) {
                 return _url.indexOf(websiteUrl) === 0;
             },
-            maxDepth: 3
+            maxDepth: 5
         };
         scrape(options).then((result) => {
             console.log('Website succesfully downloaded');  
@@ -142,3 +145,12 @@ class ContentLoader {
 }
 
 let loader = new ContentLoader();
+
+// loader.wv.onpopstate = function (event) {
+//     if (event.state) {
+//         console.log(event);
+//       // history changed because of pushState/replaceState
+//     } else {
+//       // history changed because of a page load
+//     }
+//   }

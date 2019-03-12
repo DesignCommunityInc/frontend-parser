@@ -111,17 +111,15 @@ $(function () {
                         },100)
                     },
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                         $('.control-buttons-form-login .loading-wrapper').detach();
                         if(response["query-status"] != 100){
                             $(response["error"]['error-field']).addClass('error-input');
                             errorViewAnimation($(response["error"]['error-field']), 'view', response["error"]['message']);
                         }else{
-                            document.cookie = "refreshToken="+response['message']['refreshToken']+"; domain=/.smart-home.h1n.ru";
-                            document.cookie = "accessToken="+response['message']['accessToken']+"; domain=/.smart-home.h1n.ru";
                             // $('form').css({display: 'none'});
                             // $('.login-form').css({display: 'block'});
-                            // console.log(response);
+                            console.log('success');
                         }
                 },
                 error: function(){
