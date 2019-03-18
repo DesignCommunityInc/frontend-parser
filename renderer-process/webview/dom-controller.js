@@ -1,7 +1,13 @@
+// when console log this, it shows tempdivision
+
 $(document).ready(function() {
     
     let domController = new DOMController();
-
+    let pageNodes = document.body.getElementsByTagName('*');
+    
+    Array.prototype.forEach.call(pageNodes, (node) => {
+        node.addEventListener('contextmenu', ContextMenuOpen().bind(this));
+    });
     window.addEventListener('mousedown', function(event){
         let e = event || window.event;
         if(e.buttons === 1){
@@ -9,10 +15,9 @@ $(document).ready(function() {
             return false;
         }
         if(e.buttons === 3){
-            domController.showContext('cssRules');
-            return false;
+            // domController.showContext('cssRules');
         }        
-    });
+    });       
 
     $(window).on('mousemove', function(event) {
         let e = event || window.event;
@@ -22,13 +27,21 @@ $(document).ready(function() {
 
     $(window).mouseup(function(event){
         let e = event || window.event;
+        sendMainSync('resetSelectedTool');
         domController.resetTempStyles();
     });
-
         
     getStyle('.first-view');
     console.log(window.getComputedStyle(document.getElementsByClassName('first-view')[0]));
 });
+function ContextMenuOpen() {
+    console.log(this);
+    Array.prototype.forEach.call(this.classList, className => {
+        let cssRules = getStyle(className);
+        console.log(cssRules);
+    });
+    // domController.showContext('cssRules');
+}
 function getStyle(className) {
     let css = document.styleSheets;
     Array.prototype.forEach.call(css, style => {
@@ -81,24 +94,18 @@ class DOMController {
         this.tempDivision.mouseStartPos = { x: e.pageX, y: e.pageY };
     }
     setSelectionArea(e) {
-        // console.log(this.tempDivision.element);
         let selectedTool = sendMainSync('getSelectedTool');
-        if(selectedTool !== -1){
+        if(selectedTool === 0){
             window.getSelection().removeAllRanges();
-// console.log(document.documentElement.scrollTop);            
             sendMainAsync('getSelectionArea', { alignment: e.shiftKey, pageX: e.pageX, pageY: e.pageY, startX: this.tempDivision.mouseStartPos.x, startY: this.tempDivision.mouseStartPos.y, offsetX: $(this.tempDivision.element).offset().left, offsetY: $(this.tempDivision.element).offset().top/*, scrollTop: document.documentElement.scrollTop*/ });
             if(selectedTool === 2) $(this.tempDivision.element).css({'border-radius': '50%'});
         }
     }
     resetTempStyles() {
-        // if(document.body.childNodes.indexOf(this.tempDivision.element) === -1) return false;
-        // Object.keys(this.tempDivision.element.style).forEach(key => {
         this.tempDivision.element.style.width = "0px";
         this.tempDivision.element.style.height = "0px";
         this.tempDivision.element.style.top = "0px";
         this.tempDivision.element.style.bottom = "0px";
-        // })
-        // document.body.removeChild(this.tempDivision.element);
         $(this.tempDivision.element).remove();
     }
     addNode() { 

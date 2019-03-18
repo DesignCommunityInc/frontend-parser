@@ -8,9 +8,10 @@ let selectedTool = {
 }
 let tools = []
 
-ipcMain.on('setSelectedTool', (event, index)    => { selectedTool = index })
-ipcMain.on('setToolsList', (event, array)       => { tools = array })
-ipcMain.on('getSelectedTool', (event)           => { event.returnValue =  selectedTool })
+ipcMain.on('setSelectedTool', (event, index)    => { selectedTool.index = index; event.returnValue = false })
+ipcMain.on('resetSelectedTool', (event, index)    => { selectedTool.index = -1; event.returnValue = false })
+ipcMain.on('setToolsList', (event, array)       => { tools = array; event.returnValue = false })
+ipcMain.on('getSelectedTool', (event)           => { event.returnValue =  selectedTool.index })
 
 ipcMain.on('svgFilesRead', (event, args) => {
     let svgFolder = './assets/svg/tools/'

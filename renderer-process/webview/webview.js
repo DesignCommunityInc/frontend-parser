@@ -20,12 +20,12 @@ $(document).ready(function(){
         sendMainAsync("mouse-pos-changed-message", { x: event.pageX, y: event.pageY })
     });
 
-    document.getElementsByTagName('body')[0].addEventListener('contextmenu', function(ev) {
-        ev.preventDefault();
-        // showContextMenu();
-        console.log('hello');
-        return false;
-    }, false);
+    // document.getElementsByTagName('body')[0].addEventListener('contextmenu', function(ev) {
+    //     ev.preventDefault();
+    //     // showContextMenu();
+    //     console.log('hello');
+    //     return false;
+    // }, false);
 });
 
 class WorkSpace {
