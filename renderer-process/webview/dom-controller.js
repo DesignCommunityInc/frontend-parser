@@ -1,58 +1,5 @@
 // when console log this, it shows tempdivision
 
-$(document).ready(function() {
-    
-    let domController = new DOMController();
-    let pageNodes = document.body.getElementsByTagName('*');
-    
-    Array.prototype.forEach.call(pageNodes, (node) => {
-        node.addEventListener('contextmenu', ContextMenuOpen().bind(this));
-    });
-    window.addEventListener('mousedown', function(event){
-        let e = event || window.event;
-        if(e.buttons === 1){
-            domController.setSelectionMouseStartPos(e);
-            return false;
-        }
-        if(e.buttons === 3){
-            // domController.showContext('cssRules');
-        }        
-    });       
-
-    $(window).on('mousemove', function(event) {
-        let e = event || window.event;
-        if(e.buttons === 1) 
-            domController.setSelectionArea(e);
-    });
-
-    $(window).mouseup(function(event){
-        let e = event || window.event;
-        sendMainSync('resetSelectedTool');
-        domController.resetTempStyles();
-    });
-        
-    getStyle('.first-view');
-    console.log(window.getComputedStyle(document.getElementsByClassName('first-view')[0]));
-});
-function ContextMenuOpen() {
-    console.log(this);
-    Array.prototype.forEach.call(this.classList, className => {
-        let cssRules = getStyle(className);
-        console.log(cssRules);
-    });
-    // domController.showContext('cssRules');
-}
-function getStyle(className) {
-    let css = document.styleSheets;
-    Array.prototype.forEach.call(css, style => {
-        let classes = style.rules || style.cssRules;
-        for (var x = 0; x < classes.length; x++) {
-            if (classes[x].selectorText == className) {
-                (classes[x].cssText) ? console.log(classes[x].cssText) : console.log(classes[x].style.cssText);
-            }
-        }
-    });
-}
 class DOMController {
     constructor(){
         this.tempDivision = {
@@ -61,18 +8,16 @@ class DOMController {
         };
         this.render();
     }
+
     async render(){
-        sendMainAsync('onHierarchyCreated', this.treeConstructor(document.documentElement, true));   // Create tree of DOM nodes 
-        this.tempDivision.element = document.createElement('div');              // Create block for selection tool 
-        this.tempDivision.element.classList.add('tmpDiv');                      // and add class 
-        await this.IPCAsync();                                                  // After rendering call events()
+        sendMainAsync('onHierarchyCreated', this.treeConstructor(document.documentElement, true));  // Create tree of DOM nodes 
+        this.tempDivision.element = document.createElement('div');                                  // Create block for selection tool 
+        this.tempDivision.element.classList.add('tmpDiv');                                          // and add class 
+        await this.IPCAsync();                                                                      // After rendering call events()
     } 
+
     async IPCAsync(){
-        // addRendererListener('create-DOM-tree', () => {
-        //     sendMainAsync('onHierarchyCreated', this.treeConstructor(document.documentElement, true));   // Create tree of DOM nodes 
-        // });
-        // IPC: Get selected area parametres: (x0, y0); (x1, y1)
-        addRendererListener('getSelectionArea-reply', (event, sender) => {
+        addRendererListener('getSelectionArea-reply', (event, sender) => {                          // IPC: Get selected area parametres: (x0, y0); (x1, y1)
             Object.keys(sender).forEach(key => {
                 this.tempDivision.element.style[key] = sender[key] + 'px';
             });
@@ -88,7 +33,8 @@ class DOMController {
         });
     }
     
-    // FUNCTIONS
+    // FUNCTIONS -------------------------------------------------------------
+    
     setSelectionMouseStartPos(e) {
         document.body.append(this.tempDivision.element); 
         this.tempDivision.mouseStartPos = { x: e.pageX, y: e.pageY };
@@ -127,6 +73,20 @@ class DOMController {
         }
         return ret.substring(0,length);
     }
+    getStyle(className) {
+        let css = document.styleSheets;
+        let cssRules = [];
+        Array.prototype.forEach.call(css, style => {
+            let classes = style.cssRules;
+            Array.prototype.forEach.call(classes, (_class) => {
+                if (_class.selectorText === className) {
+                    (_class.cssText) ? cssRules.push(_class.cssText) : '';
+                }
+            });
+        });
+        console.log(cssRules);
+        return cssRules;
+    }
     treeConstructor(parentNode) {
         let nodes = null;
         let dom = null;
@@ -152,3 +112,5 @@ class DOMController {
         return dom;
     }
 }
+
+module.exports = new DOMController();

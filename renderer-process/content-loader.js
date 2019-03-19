@@ -1,30 +1,20 @@
-// const $ = require("jquery");
 const { ipcRenderer, session } = require('electron');
 const scrape = require('website-scraper');
 const fs = require('fs');
-
-// $(document).ready(function(){
-//     let loader = new ContentLoader();
-
-//     loader.webview.send('create-DOM-tree');
-// });
-
+const path = require('path');
 // console.log(webview.getWebContents());
 // //https://ourcodeworld.com/articles/read/374/how-to-download-the-source-code-js-css-and-images-of-a-website-through-its-url-web-scraping-with-node-js
 
-// document.addEventListener('DOMContentLoaded', function(){
-
-// });
 
 class ContentLoader {
     constructor(){
         this.webview = document.querySelector('webview');
-        this.buttons ={
+        this.buttons = {
             backward: document.getElementById('backward'),
             forward: document.getElementById('backward') // forward 
         }
         this.__basedir = `${__dirname.replaceAll('\\', '/')}`;
-        this.__path = `${__appdir.replaceAll('\\', '/')}`;
+        this.__appdir = `${__appdir.replaceAll('\\', '/')}`;
 
         $(this.webview).bind('did-start-loading', () => {   // DID-START-LOADING EVENT 
             this.render();
@@ -38,11 +28,12 @@ class ContentLoader {
         ipcRenderer.send('clear-tree-message');
         wv.addEventListener('did-stop-loading', () => { // did-stop-loading EVENT 
             this.removePreloaders();
-            wv.executeJavaScript(`require('${this.__path}/renderer-process/webview/webview')`);
-            wv.executeJavaScript(`require('${this.__path}/renderer-process/webview/dom-controller')`);
+            wv.executeJavaScript(`require('${this.__appdir}/renderer-process/webview/webview')`);
+            wv.executeJavaScript(`require('${this.__appdir}/renderer-process/webview/dom-controller')`);
             // wv.addEventListener('dom-ready', () => { // DOM-READY EVENT 
                 ipcRenderer.send('set-page-title', wv.getTitle());
                 this._canGoBack();
+                wv.insertCSS(fs.readFileSync(path.join(__appdir, 'assets/css/native-ui/ui-context.css'), 'utf8'));
                 wv.insertCSS('.tmpDiv{position: absolute;border: 1px solid #1E90FF;border-radius: 2px;background: rgba(30, 144, 255, .2);z-index:1000000;}');
                 wv.insertCSS('.hover-outline{outline: 2px dotted rgba(30, 144, 255, 0.6);transition:0.4s ease-in-out outline-color;}');
                 $(wv).mouseover(function(){

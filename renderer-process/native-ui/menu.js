@@ -31,7 +31,7 @@ class Menu {
         let FieldList = document.registerElement('ui-context', {
             prototype: Object.create(HTMLElement.prototype)
         });
-
+        
         Array.prototype.forEach.call(this.fields, (field) => {
             let item = document.createElement('div');
             let title = document.createElement('img');

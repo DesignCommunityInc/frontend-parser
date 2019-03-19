@@ -1,76 +1,114 @@
+const { ipcRenderer } = require('electron')
 const $ = require("jquery")
 const _$ = require('jquery-browserify')
 require('jquery-mousewheel')(_$)
-const { ipcRenderer } = require('electron')
 
-$(document).ready(function(){
+// content-loader.js ~ did-stop-loading
 
-    let workspace = new WorkSpace();
-    sendMainAsync('webview-loaded');
-    // Mouse scroll scale function 
-    _$(document).on('mousewheel', function(event){
-       workspace.wheel(event.ctrlKey, event.deltaY, {x: event.pageX, y: event.pageY});
-    });
-
-    $('.backward-button').on('click', function(e) {
-        sendMainAsync('goBack')
-    });
-
-    $(document).on('mousemove', function(event){
-        sendMainAsync("mouse-pos-changed-message", { x: event.pageX, y: event.pageY })
-    });
-
-    // document.getElementsByTagName('body')[0].addEventListener('contextmenu', function(ev) {
-    //     ev.preventDefault();
-    //     // showContextMenu();
-    //     console.log('hello');
-    //     return false;
-    // }, false);
+let DOMController = require(`${__dirname}\\dom-controller`);
+let UIContext = document.registerElement('ui-context', {
+    prototype: Object.create(HTMLElement.prototype)
 });
+let uiContext = new UIContext();
 
-class WorkSpace {
-    // private variables
-    constructor() {
-        this.init();
-    }
-    init(saved_project){
-        this.render()
-    }
-    render(){
-        this.IPC()
-    }
-    IPC(){           
-        addRendererListener('set-page-title-reply', (event, title) => {
-            console.log(`${title}`)
+
+let pageNodes = document.body.getElementsByTagName('*');
+Array.prototype.forEach.call(pageNodes, (node) => {
+    node.addEventListener('contextmenu', function(event) {
+        let e = event || window.event;
+        e.stopPropagation();
+        let context = {};
+        context.cssRules = getCSSRules(this);
+        showContextMenu({pageX: e.pageX, pageY: e.pageY}, context)
+    });
+});
+document.addEventListener('mousedown', function(event){
+    let e = event || window.event;
+    if(e.buttons === 1){
+        DOMController.setSelectionMouseStartPos(e);
+        return false;
+    }     
+});       
+document.addEventListener('mousemove', (event) =>  {
+    let e = event || window.event;
+    sendMainAsync("mouse-pos-changed-message", { x: e.pageX, y: e.pageY })
+    if(e.buttons === 1) 
+    DOMController.setSelectionArea(e);
+});
+document.addEventListener('mouseup', (event) => {
+    let e = event || window.event;
+    sendMainSync('resetSelectedTool');
+    DOMController.resetTempStyles();
+});
+// Mouse scroll scale function 
+_$(document).on('mousewheel', function(event){
+    wheel(event.ctrlKey, event.deltaY, {x: event.pageX, y: event.pageY});
+});
+function getCSSRules(node){
+    let CSSRules = [];
+    Array.prototype.forEach.call(node.classList, _class => {
+        CSSRules.push(DOMController.getStyle(`.${_class}`));
+    });
+    return CSSRules; 
+}
+
+function wheel(ctrl, deltaY, position){
+    if(!ctrl) return false;
+    if(deltaY > 0) sendMainAsync('scale-changed', true);
+        else sendMainAsync('scale-changed', false);
+    sendMainAsync('mouse-pos-changed-message', position);
+}
+function showContextMenu(e, context) {
+    // let tmpNode = null;
+    showContext();
+    function showContext(){
+        // if(typeof(tmpNode) !== null){
+            contextClear();
+        // }
+        Array.prototype.forEach.call(context.cssRules, (rule) => {
+            let childItem = document.createElement('span');
+            childItem.innerHTML = rule;
+            childItem.addEventListener('click', function(){
+            });
+            uiContext.append(childItem);
         });
-        // addRendererListener('getContextList', (event, sender) => {
-        //     event.sender.send
-        // });
-    }
+        uiContext.style.left = `${e.pageX}px`;
+        uiContext.style.top = `${e.pageY}px`;
+        console.log(uiContext.style.left);
+        document.body.append(uiContext);
 
-    // FUNCTIONS 
-    wheel(ctrl, deltaY, position){
-        if(!ctrl) return;
-        if(deltaY > 0)
-            sendMainAsync('scale-changed', true);
-        else 
-            sendMainAsync('scale-changed', false);
-    
-        sendMainAsync('mouse-pos-changed-message', position);
+        // tmpNode = node; // for clicking on current object twice>
     }
 }
-
-
-function showContextMenu() {
-    let doc = document.createElement('div').innerHTML='<object type="text/html" data="./sections/native-ui/context.html" ></object>';
-    let template = doc.getElementsByTagName('object')[0].querySelector('.task-template')
-    let clone = document.importNode(template.content, true)
-    document.getElementsByTagName('body')[0].append(clone);
+function setUIContextPosition(ui){
+    // ui.style.left = xxx;
+    // ui.style.top = xxx;
 }
-
+function contextClear(){
+    $(uiContext).remove();
+    uiContext = null;
+    uiContext = new UIContext();
+}
 // function uploadStyles(filename){
 //     let linkElement = document.createElement('link')
 //     $(linkElement).attr('rel', 'stylesheet')
 //     $(linkElement).attr('type', 'text/css');
 //     $(linkElement).attr('href', '../../assets/css/' + filename);
+// }
+
+
+
+// class WorkSpace {
+//     // private variables
+//     constructor() {
+//         this.init();
+//     }
+//     init(saved_project){
+//         this.render()
+//     }
+//     render(){
+//         this.IPC()
+//     }
+
+//     // FUNCTIONS 
 // }
