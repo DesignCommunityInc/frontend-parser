@@ -86,7 +86,7 @@ class DOMController {
                     if (queryElement === node){
                         // console.log(rule);
                         rule.cssStringifyText = this.CSSStringify(rule.cssText);
-                        console.log(rule.cssStringifyText);
+                        // console.log(rule.cssStringifyText);
                         CSSRules.push(rule);
                     }
                 });

@@ -2,6 +2,7 @@ ui-context{
     cursor: pointer;
     display: block;
     position: absolute;
+    min-width: 200px;
     border-radius: 5px;
     background: #fff;
     box-shadow: 0 0 30px -20px #323232;
@@ -21,16 +22,6 @@ ui-context p{
     background: #ccc;
     user-select: none;
 }
-/* ui-context p:not(:first-child)::after{
-    content: '';
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    right: 0;
-    top: 0;
-    background: #ccc;
-} */
 ui-context span{
     display: block;
     position: relative;
@@ -48,7 +39,12 @@ ui-context span:hover{
     color: #323232;
     transition: .1s ease-in-out;
 }
-
+ui-context .cssView {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
 /* .ui-css{
 
 } */
