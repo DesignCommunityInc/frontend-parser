@@ -17,8 +17,8 @@ Array.prototype.forEach.call(pageNodes, (node) => {
     node.addEventListener('contextmenu', function(event) {
         let e = event || window.event;
         e.stopPropagation();
-        let context = CSSContextConstructor(DOMController.getCSSRules(node));
-        showContextMenu({pageX: e.pageX, pageY: e.pageY}, context)
+        let context = CSSWindowConstructor(DOMController.getCSSRules(node));
+        showContextMenu({pageX: e.pageX, pageY: e.pageY}, context);
     });
 });
 document.addEventListener('mousedown', function(event){
@@ -49,7 +49,7 @@ function wheel(ctrl, deltaY, position){
         else sendMainAsync('scale-changed', false);
     sendMainAsync('mouse-pos-changed-message', position);
 }
-function CSSContextConstructor(contextArray){
+function CSSWindowConstructor(contextArray){
     let tmpFileName = "";
     let cssMonitor = document.createElement('div');
     cssMonitor.classList.add('cssView');
@@ -67,18 +67,31 @@ function CSSContextConstructor(contextArray){
         });
     return cssMonitor;
 }
+function PropertiesWindowConstructor(contextArray){
+    let tmpClassName = "";
+    let cssMonitor = document.createElement('div');
+    cssMonitor.classList.add('cssView');
+        Array.prototype.forEach.call(contextArray, (context) => {
+            let cssClassName = context.selectorText;
+            if(tmpClassName !== cssClassName){
+                let childItem = document.createElement('p');
+                childItem.innerHTML = cssFileName;
+                cssMonitor.append(childItem);
+                tmpClassName = cssClassName;
+            }
+            Array.prototype.forEach.call(context.style, property => {
+                let childItem = document.createElement('span');
+                childItem.innerHTML += property;
+                cssMonitor.append(childItem);
+            });
+        });
+    return cssMonitor;
+}
 function showContextMenu(e, context) {
-    // let tmpNode = null;
-    showContext();
-    function showContext(){
-        // if(typeof(tmpNode) !== null){
-            contextClear();
-        // }
-        setUIContextPosition(e);
-        uiContext.append(context);
-        document.body.append(uiContext);
-        // tmpNode = node; // for clicking on current object twice>
-    }
+    contextClear();
+    setUIContextPosition(e);
+    uiContext.append(context);
+    document.body.append(uiContext);
 }
 function setUIContextPosition(e){
     uiContext.style.left = `${e.pageX}px`;
