@@ -66,6 +66,9 @@ class DOMController {
         this.resetTempStyles();
         document.body.append(el);
     }
+    selectNode(node){
+
+    }
     keyGenerator(length) {
         let ret = "";
         while (ret.length < length) {
@@ -73,19 +76,26 @@ class DOMController {
         }
         return ret.substring(0,length);
     }
-    getStyle(className) {
-        let css = document.styleSheets;
-        let cssRules = [];
-        Array.prototype.forEach.call(css, style => {
-            let classes = style.cssRules;
-            Array.prototype.forEach.call(classes, (_class) => {
-                if (_class.selectorText === className) {
-                    (_class.cssText) ? cssRules.push(_class.cssText) : '';
-                }
+    getCSSRules(node) {
+        let styleSheets = document.styleSheets;
+        let CSSRules = [];
+        Array.prototype.forEach.call(styleSheets, sheet => {
+            Array.prototype.forEach.call(sheet.cssRules, rule => {
+                let queryElements = document.querySelectorAll(`${rule.selectorText}`);
+                Array.prototype.forEach.call(queryElements, queryElement => {
+                    if (queryElement === node){
+                        // console.log(rule);
+                        rule.cssStringifyText = this.CSSStringify(rule.cssText);
+                        console.log(rule.cssStringifyText);
+                        CSSRules.push(rule);
+                    }
+                });
             });
         });
-        console.log(cssRules);
-        return cssRules;
+        return CSSRules;
+    }
+    CSSStringify(string){
+        return string.replace(/{/, '{&emsp;').split(/;/).reduce((accumulator, currentValue) => { return `${accumulator};<br/>&emsp;${currentValue}`}).replace('&emsp; }', '}');
     }
     treeConstructor(parentNode) {
         let nodes = null;

@@ -1,0 +1,12 @@
+.tmpDiv {
+    position: absolute;
+    border: 1px solid #1E90FF;
+    border-radius: 2px;
+    background: rgba(30, 144, 255, .2);
+    z-index:1000000;
+}
+
+.hover-outline{ 
+    outline: 2px dotted rgba(30, 144, 255, 0.6);
+    transition:0.4s ease-in-out outline-color;
+}

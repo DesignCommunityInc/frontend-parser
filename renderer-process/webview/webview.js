@@ -17,8 +17,7 @@ Array.prototype.forEach.call(pageNodes, (node) => {
     node.addEventListener('contextmenu', function(event) {
         let e = event || window.event;
         e.stopPropagation();
-        let context = {};
-        context.cssRules = getCSSRules(this);
+        let context = DOMController.getCSSRules(node);
         showContextMenu({pageX: e.pageX, pageY: e.pageY}, context)
     });
 });
@@ -40,17 +39,10 @@ document.addEventListener('mouseup', (event) => {
     sendMainSync('resetSelectedTool');
     DOMController.resetTempStyles();
 });
-// Mouse scroll scale function 
+// SCROLL  
 _$(document).on('mousewheel', function(event){
     wheel(event.ctrlKey, event.deltaY, {x: event.pageX, y: event.pageY});
 });
-function getCSSRules(node){
-    let CSSRules = [];
-    Array.prototype.forEach.call(node.classList, _class => {
-        CSSRules.push(DOMController.getStyle(`.${_class}`));
-    });
-    return CSSRules; 
-}
 
 function wheel(ctrl, deltaY, position){
     if(!ctrl) return false;
@@ -58,31 +50,34 @@ function wheel(ctrl, deltaY, position){
         else sendMainAsync('scale-changed', false);
     sendMainAsync('mouse-pos-changed-message', position);
 }
-function showContextMenu(e, context) {
+function showContextMenu(e, contextArray) {
     // let tmpNode = null;
     showContext();
     function showContext(){
         // if(typeof(tmpNode) !== null){
             contextClear();
         // }
-        Array.prototype.forEach.call(context.cssRules, (rule) => {
+        let tmpFileName = "";
+        Array.prototype.forEach.call(contextArray, (context) => {
+            let cssFileName = context.parentStyleSheet.href.split('/').slice(-1).pop() + '<br/>';
+            if(tmpFileName !== cssFileName){
+                let childItem = document.createElement('p');
+                childItem.innerHTML = cssFileName;
+                uiContext.append(childItem);
+                tmpFileName = cssFileName;
+            }
             let childItem = document.createElement('span');
-            childItem.innerHTML = rule;
-            childItem.addEventListener('click', function(){
-            });
+            childItem.innerHTML += context.cssStringifyText;
             uiContext.append(childItem);
         });
-        uiContext.style.left = `${e.pageX}px`;
-        uiContext.style.top = `${e.pageY}px`;
-        console.log(uiContext.style.left);
+        setUIContextPosition(e);
         document.body.append(uiContext);
-
         // tmpNode = node; // for clicking on current object twice>
     }
 }
-function setUIContextPosition(ui){
-    // ui.style.left = xxx;
-    // ui.style.top = xxx;
+function setUIContextPosition(e){
+    uiContext.style.left = `${e.pageX}px`;
+    uiContext.style.top = `${e.pageY}px`;
 }
 function contextClear(){
     $(uiContext).remove();

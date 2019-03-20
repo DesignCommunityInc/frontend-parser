@@ -197,7 +197,7 @@ class Tree {
         return container;
     }
     listItemCreator(node) {
-        let textNodes = /\b(?:P|A|STRONG|SUB|SUP|H)\b/;
+        let textNodes = /\b(?:P|A|STRONG|SUB|SUP|H1|H2|H3|H4|H5|H6)\b/;
         let child = document.createElement('li');
         child.classList.add(this.classNameSpace.itemElementClass);
         Object.keys(node).forEach(key => {
