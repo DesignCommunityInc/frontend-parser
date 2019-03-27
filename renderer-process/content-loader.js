@@ -44,7 +44,6 @@ class ContentLoader {
     }
     async IPCAsync() {
         ipcRenderer.on('selected-file', (event, sender) => {
-            console.log(sender[0]);
             this.webview.loadURL(`${sender[0]}`);
         });
         ipcRenderer.on('workspace-scale', (event, sender) => {

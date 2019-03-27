@@ -130,14 +130,14 @@ class Tree {
             let child = this.treeRenderer(element);
             childContainer.append(child);
         });
-        Array.from(container.querySelectorAll(`.${this.classNameSpace.itemElementClass}`)).addEventListener('dblclick', function(e){ 
+        container.querySelectorAll(`.${this.classNameSpace.itemElementClass}`).addEventListener('dblclick', function(e){ 
             e.stopPropagation(); 
             this.parentNode.classList.toggle('branch-show');
         });
-        Array.from(container.querySelectorAll(`.${this.classNameSpace.itemElementClass}`)).addEventListener('mouseenter', function(){
+        container.querySelectorAll(`.${this.classNameSpace.itemElementClass}`).addEventListener('mouseenter', function(){
             if(this.getAttribute('key') !== null) document.getElementsByTagName('webview')[0].send('element:mouseenter-message', this.getAttribute('key'));
         });
-        Array.from(container.querySelectorAll(`.${this.classNameSpace.itemElementClass}`)).addEventListener('mouseleave', function(){
+        container.querySelectorAll(`.${this.classNameSpace.itemElementClass}`).addEventListener('mouseleave', function(){
             if(this.getAttribute('key') !== null) document.getElementsByTagName('webview')[0].send('element:mouseleave-message', this.getAttribute('key'));            
         });
         container.append(childContainer);

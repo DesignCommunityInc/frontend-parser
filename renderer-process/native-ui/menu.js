@@ -1,11 +1,8 @@
 // const $ = require
 
-$(document).ready(function(){
-    let menu = new Menu();
-});
-
 class Menu {
     constructor(){
+        this.container = document.querySelector('.menu')
         this.nameSpace = {
             menu: 'menu',
             field: 'field',
@@ -24,18 +21,13 @@ class Menu {
               sender: 'openFile'
             }]
         }];
-
         this.render();
     }
     render(){
-        let FieldList = document.registerElement('ui-context', {
-            prototype: Object.create(HTMLElement.prototype)
-        });
-        
         Array.prototype.forEach.call(this.fields, (field) => {
+            let fieldList = new uiContext();
             let item = document.createElement('div');
             let title = document.createElement('img');
-            let fieldList = new FieldList();
 
             item.classList.add(this.nameSpace.field);
             fieldList.classList.add(this.nameSpace.context);
@@ -53,11 +45,7 @@ class Menu {
             item.append(fieldList);
             this.container.append(item);
         });
-        this.IPCAsync();
     }
-    IPCAsync(){
-        
-    }
-
-    // FUNCTIONS
 }
+
+module.exports = new Menu();
