@@ -81,13 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.burger').addEventListener('click', function(){
         Menu.container.classList.toggle('menu-opened');
     });
-    document.querySelectorAll(".tb-button").addEventListener('click', function(event){                
+    document.querySelectorAll(".tb-button").addEventListener('click', function(){                
         ipcRenderer.send('window-topbar-action', this.id)
     });
-    document.querySelectorAll("#devtools").addEventListener('click', function(event){  
+    document.querySelectorAll("#devtools").addEventListener('click', function(){  
         ipcRenderer.send('devtools-webview-open')
     });
-    document.addEventListener('keydown', function (event) {
+    document.addEventListener('keydown', function (e) {
         e.preventDefault();
         if (e.keyCode == 27) { 
             TopBar.scale.container.removeClass('active-scale-list'); // Close scale list on Escape button

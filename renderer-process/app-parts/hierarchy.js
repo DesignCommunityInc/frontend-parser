@@ -55,8 +55,9 @@ class Tree {
         });
         ipcRenderer.on('ctrl+Y', (event, sender) => {
             let w = (this.container.offsetWidth !== 0) ? 0 : this.widthCash;
-            this.widthCash = ($this.offsetWidth !== 0) ? (this.container.offsetWidth > 150) ? this.container.offsetWidth : 300 : this.widthCash;
-            this.container.width(w);
+            this.widthCash = (this.container.offsetWidth !== 0) ? (this.container.offsetWidth > 150) ? this.container.offsetWidth : 300 : this.widthCash;
+            this.container.style.width = `${w}px`;
+            console.log(this.container.offsetWidth);
             this.invalidate();
         });
     }
