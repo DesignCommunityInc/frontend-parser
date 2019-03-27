@@ -8,5 +8,5 @@
 
 .hover-outline{ 
     outline: 2px dotted rgba(30, 144, 255, 0.6);
-    transition:0.4s ease-in-out outline-color;
+    transition: 0.3s ease-in-out outline-color;
 }
