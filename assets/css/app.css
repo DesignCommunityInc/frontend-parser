@@ -4,8 +4,9 @@
 @import "./app-parts/toolbar.css";
 @import "./app-parts/topbar.css";
 @import "./app-parts/workspace.css";
+@import "./app-parts/styler.css";
 @import "./native-ui/menu.css";
-@import 'native-ui/ui-context.css';
+@import './native-ui/ui-context.css';
 
 
 
@@ -55,13 +56,15 @@ body{
     display: none;
 }
 .flex-container{
+    --size: calc(var(--header-height) + var(--border-size-default));
     display: flex;
     position: fixed;
-    width: 100%;
-    height: 100%;
-    margin-left: var(--tools-width);
-    margin-top: calc(var(--header-height) + var(--border-size-default));
+    width: calc(100% - var(--tools-width) - var(--border-size-default));
+    height: calc(100% - var(--header-height) - 2px);
+    margin-left: calc(var(--tools-width) + var(--border-size-default));
+    margin-top: var(--size);
     z-index: 10;
+    /* border: 1px solid red; */
 }
 .preloader{
     display: block;
@@ -85,4 +88,20 @@ body{
     visibility: hidden;
     opacity: 0;
     transition: var(--transition-slow);
+}
+
+
+::-webkit-scrollbar{
+    width: 5px;
+}
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+::-webkit-scrollbar-thumb {
+    background: var(--resColor); 
+    border-radius: 10px;
+    outline: none;
+}
+::-webkit-scrollbar-button{
+    display: none;
 }

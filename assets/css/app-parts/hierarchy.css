@@ -7,8 +7,9 @@
     height: 100%;
     width: 300px;
     height: 100vh;
+    padding-bottom: calc(var(--header-height) + var(--border-size-default));
     background: var(--mainColor);
-    border-left: var(--border-size-default) solid var(--resColor);
+    /* border-left: var(--border-size-default) solid var(--resColor); */
     border-right: var(--border-size-default) solid var(--resColor);
     overflow-x: hidden;
     z-index: 11;
@@ -78,9 +79,12 @@
     transition: var(--transition-fast);
 }
 .h-item-child-container:active{
-    outline-color: var(--hoverBlueColor);
+    /* outline-color: var(--hoverBlueColor); */
     transform: scale(0.99);   
     transition: var(--transition-fast);
+}
+.h-item-child-selected {
+    background: #99D0FF;   
 }
 .h-item-type{
     display: inline-block;

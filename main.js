@@ -5,16 +5,31 @@ const path = require('path')
 const glob = require('glob')
 const os = require('os');
 // let {ipcMain} = require('electron')
-const {app, BrowserWindow} = electron;
+const {app, BrowserWindow, Menu } = electron;
 
 let win
 // Listen for the app to be ready 
 app.on('ready', function(){
     // Create new window
     loadDemos()
-    win = new BrowserWindow({
+    // startView = new BrowserWindow({
+    //     width: 800,
+    //     height: 550,
+    //     resizable: false,
+    //     frame: false,
+    //     show: false,
+    // })
+    // // (os == 'win32' ? 'file://' : '')
+    // startView.openDevTools();
+    // // Load window
+    // startView.loadURL(path.join(__dirname, 'index.html'));
+    // startView.on('ready-to-show', () => {
+    //     startView.show();
+    // })
+    // ---
+    let mainWindow = new BrowserWindow({
         width: 1100,
-        height: 800,
+        height: 750,
         minWidth: 720,
         minHeight: 480,
         frame: false,
@@ -27,16 +42,15 @@ app.on('ready', function(){
             preload: path.join(__dirname, 'preload.js')
         }
     })
-    // (os == 'win32' ? 'file://' : '')
-    win.openDevTools();
+    mainWindow.openDevTools();
     // Load window
-    win.loadURL(path.join(__dirname, 'index.html'));
-    win.on('ready-to-show', () => {
-        win.maximize();
-        win.show();
+    mainWindow.loadURL(path.join(__dirname, 'sections/windows/main.html'));
+    mainWindow.on('ready-to-show', () => {
+        mainWindow.maximize();
+        mainWindow.show();
     })
+    // ---
 })
-
 
 // Require each JS file in the main-process dir
 function loadDemos () {

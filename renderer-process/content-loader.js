@@ -7,7 +7,7 @@ const path = require('path');
 
 
 class ContentLoader {
-    constructor(){
+    constructor( /** pass here a styler constructor */){
         this.webview = document.querySelector('webview');
         this.buttons = {
             backward: document.getElementById('backward'),
@@ -22,48 +22,34 @@ class ContentLoader {
     }
     async render(){
         // this.downloadWEBContent('http://smart-home.h1n.ru/', './renderer-process/webview/content');
-        let wv = this.webview;
         await this.IPCAsync();
         this.addPreloaders();
         ipcRenderer.send('clear-tree-message');
+
+        let wv = this.webview;
         wv.addEventListener('did-stop-loading', () => { // did-stop-loading EVENT 
+            ipcRenderer.send('set-page-title', wv.getTitle());
             this.removePreloaders();
-            wv.executeJavaScript(`require('${this.__appdir}/renderer-process/webview/webview')`);
+            wv.executeJavaScript(`require('${this.__appdir}/renderer-process/events.js')`);
             wv.executeJavaScript(`require('${this.__appdir}/renderer-process/webview/dom-controller')`);
             wv.insertCSS(fs.readFileSync(path.join(this.__appdir, '/assets/css/native-ui/ui-context.css'), 'utf8'));
             wv.insertCSS(fs.readFileSync(path.join(this.__appdir, '/assets/css/native-ui/ui-selector.css'), 'utf8'));
-            // wv.addEventListener('dom-ready', () => { // DOM-READY EVENT 
-            ipcRenderer.send('set-page-title', wv.getTitle());
             this._canGoBack();
+            // wv.addEventListener('dom-ready', () => { // DOM-READY EVENT 
             wv.addEventListener('mouseover', function(){
                 wv.contentWindow.focus();
-            });  
+            });
+            // console.log(wv.getWebContents());
             // });  
         });
-        return false;
     }
     async IPCAsync() {
-        ipcRenderer.on('selected-file', (event, sender) => {
-            this.webview.loadURL(`${sender[0]}`);
-        });
-        ipcRenderer.on('workspace-scale', (event, sender) => {
-            this.webview.setZoomFactor(sender);
-        });
-        ipcRenderer.on('devtools-webview-open-reply', () => {
-            if (!this.webview.isDevToolsOpened()){
-                this.webview.openDevTools();
-            }
-        });
-        ipcRenderer.on('ctrl+Z', () => {
-            this.webview.undo();
-        });
-        ipcRenderer.on('goBack', () => {
-            this.webview.goBack();
-        });
-
-        return false;
+        ipcRenderer.on('ctrl+Z', () => {this.webview.undo();});
+        ipcRenderer.on('goBack', () => {this.webview.goBack();});
+        ipcRenderer.on('selected-file', (event, sender) => {this.webview.loadURL(`${sender[0]}`);});
+        ipcRenderer.on('workspace-scale', (event, sender) => {this.webview.setZoomFactor(sender);});
+        ipcRenderer.on('devtools-webview-open-reply', () => {if (!this.webview.isDevToolsOpened()){ this.webview.openDevTools(); }});
     }
-
     // FUNCTIONS 
     addPreloaders(){
         Array.prototype.forEach.call(document.getElementsByClassName('preloader'), (preloader) => {
@@ -86,12 +72,11 @@ class ContentLoader {
     }
     _canGoBack(){
         let wv = this.webview;
-        this.buttons.backward.addEventListener('click', function(){
-            if(wv.canGoBack())
-                wv.goBack();
-        });
-        if(this.webview.canGoBack())
+        console.log(wv.canGoBack());
+        if(wv.canGoBack()){
             this.buttons.backward.classList.add('backward-active');
+            this.buttons.backward.addEventListener('click', function(){ wv.goBack(); });
+        }
         else 
             this.buttons.backward.classList.remove('backward-active');
         return false;

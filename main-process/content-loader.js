@@ -18,6 +18,10 @@ ipcMain.on('open-file-dialog', (event, sender) => {
         properties: [`${sender}`],
         defaultPath: `C:\\Users\\${userName}\\Desktop`
     }, function (path) {
-        event.sender.send('selected-file', path)
+        Array.prototype.forEach.call(BrowserWindow.getAllWindows(), (window) => {
+            if (window.getTitle() == 'rins-app') 
+                window.webContents.send('selected-file', path)
+        });
+        // event.sender.send('selected-file', path)
     })
 })

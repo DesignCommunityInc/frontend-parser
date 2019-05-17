@@ -5,6 +5,8 @@ const { BrowserWindow, app } = remote;
 // extends global classes functions 
 String.prototype.replaceAll = function(search, replace) { return this.split(search).join(replace); }
 Element.prototype.remove = function() { this.parentElement.removeChild(this); }
+Element.prototype.clear = function() { this.innerHTML = ""; }
+NodeList.prototype.clear = function() { Array.prototype.forEach.call(this, e => { e.innerHTML = "" }); }
 NodeList.prototype.addEventListener = function(event, callback) { Array.prototype.forEach.call(this, e => { e.addEventListener(event, callback); }); }
 
 
@@ -32,7 +34,7 @@ class App {
         Array.prototype.forEach.call(this.links, (link) => {
             let template = link.import.querySelector('.task-template')
             let clone = document.importNode(template.content, true)
-            if(link.href.match('hierarchy.html') || link.href.match('workspace.html'))
+            if(link.href.match(/\b(?:hierarchy.html|workspace.html|styler.html)\b/))
                 document.querySelector('.flex-container').append(clone);
             else
                 document.querySelector('body').append(clone);
@@ -45,44 +47,27 @@ class App {
     }
 }
 
+// main 
 document.addEventListener('DOMContentLoaded', function() {
     let Application = new App();
     Application.render();
-    // Starting coding 
+    // Start coding 
     // after application interface 
     // rendered --->
     
-    
-    let Tree = require(`${__dirname}\\app-parts\\hierarchy`);
     let TopBar = require(`${__dirname}\\app-parts\\topbar`);
-    let Menu = require(`${__dirname}\\native-ui\\menu`);
     let ToolBar = require(`${__dirname}\\app-parts\\toolbar`);
+    let Menu = require(`${__dirname}\\native-ui\\menu`);
+    let Tree = require(`${__dirname}\\app-parts\\hierarchy`);
+    let Styler = require(`${__dirname}\\app-parts\\styler`);
 
-    // Listeners starts here 
-    document.addEventListener("mousemove", function(e){
-        Tree.addResizingStyles(Tree.isAvailableResizing(e.pageX));
-        switch(e.buttons) {
-            case 1: {
-                Tree.resize(e.pageX);
-            }
-        }
-    });
-    document.addEventListener("mousedown", function(e){
-        switch(e.buttons) {
-            case 1: {
-                Tree.sizable(Tree.isAvailableResizing(e.pageX));
-            }
-        }   
-    });
-    document.addEventListener('mouseup', function(e){
-        Tree.sizable(false);
-    });
-    // Topbar events personal
+    // Listeners starts here     
+    // Topbar events personal -----------------------------------------------------------------
     document.querySelector('.burger').addEventListener('click', function(){
         Menu.container.classList.toggle('menu-opened');
     });
     document.querySelectorAll(".tb-button").addEventListener('click', function(){                
-        ipcRenderer.send('window-topbar-action', this.id)
+        ipcRenderer.send('window-topbar-action', this.id);
     });
     document.querySelectorAll("#devtools").addEventListener('click', function(){  
         ipcRenderer.send('devtools-webview-open')
@@ -90,19 +75,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('keydown', function (e) {
         e.preventDefault();
         if (e.keyCode == 27) { 
-            TopBar.scale.container.removeClass('active-scale-list'); // Close scale list on Escape button
+            TopBar.scale.container.classList.remove('active-scale-list'); // Close scale list on Escape button
             return;
         }
     });
-    document.querySelectorAll('.scale input').addEventListener('focus', function(){
-        TopBar.scale.container.addClass('active-scale-list');
-    });
-    document.querySelectorAll('.scale input').addEventListener('blur', function(){
-        TopBar.scale.container.removeClass('active-scale-list');
-    });
-    // Toolbar events personal
-    document.querySelectorAll('.tool').addEventListener('click', function(e) {
-        if(e.buttons === 0)
-            ToolBar.setSelectedTool(this);
-    });
+
+    // Toolbar events personal -------------------------------------------------------------------
+    // document.querySelectorAll('.tool').addEventListener('click', function(e) {
+    //     if(e.buttons === 0)
+    //         ToolBar.setSelectedTool(this);
+    // });
 });

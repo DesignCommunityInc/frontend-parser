@@ -14,7 +14,7 @@ process.once('loaded', function(){
         ipcRenderer.send(channel, sender)
     }
     global.sendMainSync = function(channel, sender){
-        ipcRenderer.sendSync(channel, sender)
+        return ipcRenderer.sendSync(channel, sender)
     }
     /** sender as a function */
     global.addRendererListener = function(channel, sender) {

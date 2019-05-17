@@ -1,0 +1,114 @@
+/* Tools */
+.styler {
+    display: inline-flex;
+    position: relative;
+    flex-shrink: 0;
+    height: 100%;
+    width: 300px;
+    height: 100%;
+    background: var(--mainColor);
+    border-left: var(--border-size-default) solid var(--resColor);
+    overflow: hidden;
+    z-index: 11;
+
+    --default-property-color: white;
+}
+.styler > .toggler {
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    bottom: 0;
+    height: var(--header-height);
+}
+.styler > .toggler span {
+    cursor: pointer;
+    flex-basis: 20%;
+    padding: 10px;
+    width: 100%;
+    height: var(--header-height);
+    height: 40px;
+    bottom: 0;
+    text-align: center;
+    background: #eee;
+}
+.styler > .toggler span:hover {
+    background: #ccc;
+}
+.styler > .views {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.styler > .views .view {
+    display: block;
+    visibility: hidden;
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    top: 0;
+    transform: scale(1.1);
+    opacity: 0;
+    overflow-x: hidden;
+    transition: .2s ease-in-out;
+}
+.styler > .views .invert-scale{
+    transform: scale(.9);
+    transition: .2s ease-in-out;
+}
+.styler > .views .active {
+    display: block;
+    padding-bottom: var(--list-height);
+    visibility: visible;
+    transform: scale(1);
+    opacity: 1;
+    transition: .2s ease-in-out;
+}
+.styler > .views > #classes .complex{
+    display: block;
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background: white;
+    font-size: 9pt;
+    color: var(--darkColor);
+    -webkit-user-select: text;
+}
+.styler > .views > #main .complex{
+    display: table;
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    border-collapse: collapse;
+    border: none;
+    border-bottom: 1px solid #eee;
+    background: white;
+    font-size: 9pt;
+    color: var(--darkColor);
+    -webkit-user-select: text;
+}
+.styler > .views > #main .complex > .css-prop,
+.styler > .views > #main .complex > .css-val{
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.styler > .views > #main .complex > .css-prop{
+    display: table-cell;
+    position: relative;
+    width: 40%;
+    height: inherit;
+    padding: 10px;
+    background: var(--default-property-color);
+}
+.styler > .views > #main .complex > .css-val{
+    display: table-cell;
+    position: relative;
+    width: 60%;
+    height: inherit;
+    padding: 10px;
+}

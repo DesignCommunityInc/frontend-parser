@@ -65,7 +65,7 @@
     display: inline-block;
     position: absolute;
     height: 100%;
-    right: 200px;
+    right: 195px;
     background: var(--user-gradient);
     z-index: 101;
     -webkit-app-region: no-drag;

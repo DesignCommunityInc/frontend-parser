@@ -10,6 +10,8 @@ class Tree {
             containerClass: 'h-container',
             elementClass: 'h-item',
             branchClass: 'branch',
+            branchShow: 'branch-show',
+            branchActive: 'branch-active',
             itemElementClass: 'h-item-child-container',
             itemElementTypeClass: 'h-item-type',
             itemElementNameClass: 'h-item-blockname',
@@ -21,9 +23,10 @@ class Tree {
         this.temporaryActive = document.body;
         this.maxCursorPos = null;
         this.minCursorPos = null;
-        this.allowToSize = false,
+        this.allowToSize = false;
         this.margin = null;
-        this.widthCash = null;
+        this.widthCash = 0;
+        console.log(this.widthCash);
         this.dom = [];
         // this.tree = null;
 
@@ -32,12 +35,13 @@ class Tree {
     init(){ 
         this.container = document.querySelector(".hierarchy");
         this.widthCash = this.container.style.width;
-        this.margin = parseInt($('html').css("--tools-width").trim(" px", '')); // hierarchy diapason width min
+        this.margin = parseInt($('html').css("--tools-width").trim("px", '')); // hierarchy diapason width min
         this.render();
     }
     async render(){
         this.invalidate();
         await this.IPCAsync();
+        this.DOMEvents();
     }
     async IPCAsync(){
         ipcRenderer.on('onHierarchyCreated-reply', (event, sender) => {
@@ -50,15 +54,39 @@ class Tree {
                 this.container.querySelector(`.${this.classNameSpace.containerClass}`).append(tree);
             });
         });
+        ipcRenderer.on('element-selected-reply', (event, sender) => {
+           this.branchElementSelected(sender);
+        });
         ipcRenderer.on('clear-tree-reply', (event, sender) => {
             this.clearTree();
         });
         ipcRenderer.on('ctrl+Y', (event, sender) => {
-            let w = (this.container.offsetWidth !== 0) ? 0 : this.widthCash;
-            this.widthCash = (this.container.offsetWidth !== 0) ? (this.container.offsetWidth > 150) ? this.container.offsetWidth : 300 : this.widthCash;
+            let currentWidth = parseInt(this.container.style.width);
+            let w = (currentWidth !== 0) ? 0 : this.widthCash;
+            this.widthCash = (currentWidth !== 0) ? ((currentWidth > 150) ? currentWidth : 300) : this.widthCash;
             this.container.style.width = `${w}px`;
-            console.log(this.container.offsetWidth);
             this.invalidate();
+        });
+    }
+    DOMEvents(){
+        let that = this;
+        document.addEventListener("mousemove", function(e){
+            that.addResizingStyles(that.isAvailableResizing(e.pageX));
+            switch(e.buttons) {
+                case 1: {
+                    that.resize(e.pageX);
+                }
+            }
+        });
+        document.addEventListener("mousedown", function(e){
+            switch(e.buttons) {
+                case 1: {
+                    that.sizable(that.isAvailableResizing(e.pageX));
+                }
+            }   
+        });
+        document.addEventListener('mouseup', function(e){
+            that.sizable(false);
         });
     }
     // FUNCTIONS
@@ -91,7 +119,9 @@ class Tree {
     }
     resize(x){
         if(this.allowToSize) {
-            this.container.style.width = `${x - this.margin - 2}px`;
+            let newWidth = x - this.margin - 2;
+            newWidth = (newWidth < 0) ? 0 : newWidth;
+            this.container.style.width = `${newWidth}px`;
             // Remove all selections from the window
             window.getSelection().removeAllRanges(); 
             this.invalidate();
@@ -102,11 +132,31 @@ class Tree {
     }
     clearTree(){
         let container = document.getElementsByClassName(`${this.classNameSpace.containerClass}`)[0];
-        while (container.firstChild) {
-            container.removeChild(container.firstChild);
-        }
+        container.clear();
+        // while (container.firstChild) {
+        //     container.removeChild(container.firstChild);
+        // }
     }
     // TREE RENDERER FUNCTION 
+    branchElementSelected(key) {
+        let element = document.querySelector(`[key="${key}"]`);
+        let activeElements = document.querySelectorAll(`.${this.classNameSpace.branchShow}`);
+        element.classList.add('h-item-child-selected');
+        let foo = (parentElement) => {
+            if (parentElement === null) return;
+            parentElement.classList.add(`${this.classNameSpace.branchShow}`)
+            foo(parentElement.parentElement.closest(`.${this.classNameSpace.branchClass}`))    
+            // parentElement.classList.add(`${this.classNameSpace.branchActive}`)
+        }
+
+        Array.prototype.forEach.call(activeElements, e => {
+            e.classList.remove(`${this.classNameSpace.branchShow}`);
+        });
+        foo(element.closest(`.${this.classNameSpace.branchClass}`))
+        setTimeout(() => {
+            element.classList.remove('h-item-child-selected');
+        }, 500)
+    }
     treeRenderer(list){
         let container = document.createElement('ul');   // creating parent
         container.classList.add('branch');
@@ -135,14 +185,20 @@ class Tree {
             e.stopPropagation(); 
             this.parentNode.classList.toggle('branch-show');
         });
-        container.querySelectorAll(`.${this.classNameSpace.itemElementClass}`).addEventListener('mouseenter', function(){
-            if(this.getAttribute('key') !== null) document.getElementsByTagName('webview')[0].send('element:mouseenter-message', this.getAttribute('key'));
+        childContainer.querySelectorAll(`.${this.classNameSpace.itemElementClass}`).addEventListener('mouseenter', function(){
+            if(this.getAttribute('key') !== null) webview.send('element:mouseenter-message', this.getAttribute('key'));
         });
-        container.querySelectorAll(`.${this.classNameSpace.itemElementClass}`).addEventListener('mouseleave', function(){
-            if(this.getAttribute('key') !== null) document.getElementsByTagName('webview')[0].send('element:mouseleave-message', this.getAttribute('key'));            
+        childContainer.querySelectorAll(`.${this.classNameSpace.itemElementClass}`).addEventListener('mouseleave', function(){
+            if(this.getAttribute('key') !== null) webview.send('element:mouseleave-message', this.getAttribute('key'));            
         });
         container.append(childContainer);
         return container;
+    }
+    addNode(node, parentKey) {
+        let parentElement = document.querySelector(`[key="${parentKey}"]`).closest('.branch');
+        let listToPushNode = parentElement.querySelector('.h-item');
+        listToPushNode.append(listItemCreator(node));
+        branchElementSelected(node.key);
     }
     listItemCreator(node) {
         let textNodes = /\b(?:P|A|STRONG|SUB|SUP|H1|H2|H3|H4|H5|H6)\b/;
@@ -162,24 +218,16 @@ class Tree {
                             while(node[key].borderColor.length < 6) node[key].borderColor += '0';
                             span.style.boxShadow = "0 0 0 1px #" + node[key].borderColor; 
                         }
-                        if(node['b_blockName'].match(textNodes)) span.innerHTML = 'text';
+                        if(node['b_blockName'].match(textNodes)) span.innerHTML = 'text'; 
                         break;
-                    case 'b_blockName': 
-                        span.className = this.classNameSpace.itemElementNameClass;
-                        span.innerHTML = node[key];
-                        break;
-                    case 'c_id':
-                        span.className = this.classNameSpace.itemElementIdClass;
-                        span.innerHTML = node[key];
-                        break;
-                    case 'd_class':
-                        span.className = this.classNameSpace.itemElementClassnameClass;
-                        span.innerHTML = node[key];
-                        break;
-                    case 'e_href':
-                        span.className = this.classNameSpace.itemElementHrefClass;
-                        span.innerHTML = node[key];
-                        break;
+                    case 'b_blockName': span.className = this.classNameSpace.itemElementNameClass;
+                        span.innerHTML = node[key];break;
+                    case 'c_id': span.className = this.classNameSpace.itemElementIdClass;
+                        span.innerHTML = node[key]; break;
+                    case 'd_class': span.className = this.classNameSpace.itemElementClassnameClass;
+                        span.innerHTML = node[key]; break;
+                    case 'e_href': span.className = this.classNameSpace.itemElementHrefClass;
+                        span.innerHTML = node[key]; break;
                 }
                 child.append(span);
                 child.setAttribute('key', node['key']);

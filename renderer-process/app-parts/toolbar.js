@@ -11,26 +11,23 @@ class ToolBar{
     constructor(){
         this.container = document.querySelector('.tools');
         // let arr = []
-        this.tools = {
-            dom: [],
-            ids: []
-        };
+        this.tools = [];
         // ipcRenderer.send('setToolsList', arr)
         this.tools.dom = ipcRenderer.sendSync('svgFilesRead');
-        this.render()
+        this.render();
     }
     render(){
-        let tools = this.tools;
-        tools.dom.forEach((tool, i) => {
-            tools.dom[i] = this.createElementFromString(tool)
-            tools.ids.push(tools.dom[i].getAttribute('id'))
-            this.container.append(tools.dom[i])
+        this.tools.dom.forEach((tool, i) => {
+            tool = this.createElementFromString(tool)
+            this.container.append(tool)
+            tool.addEventListener('click', function(e){
+                if(e.buttons === 0){ 
+                    ipcRenderer.send('setSelectedTool', this.id);
+                }
+            });
         })
     }
     // FUNCTIONS 
-    setSelectedTool(element){
-        ipcRenderer.send('setSelectedTool', this.tools.ids.indexOf($(element).attr('id')));
-    }
     createElementFromString(str) {
         var div = document.createElement('div');
         div.innerHTML = str.trim();

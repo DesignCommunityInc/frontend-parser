@@ -13,12 +13,10 @@ let win = null;
 //     win.webContents.send('', pos);
 // }) 
 ipcMain.on('onHierarchyCreated', (event, sender) => {
-    let win
     Array.prototype.forEach.call(BrowserWindow.getAllWindows(), (window) => {
         if (window.getTitle() == 'rins-app') 
-            win = window;
+            window.webContents.send('onHierarchyCreated-reply', sender); 
     });
-    win.webContents.send('onHierarchyCreated-reply', sender); 
 })
 
 ipcMain.on('getSelectionArea', (event, sender) => {

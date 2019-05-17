@@ -10,7 +10,7 @@ class Menu {
         }
         this.container = document.getElementById(this.nameSpace.menu);
         this.fields = [{
-            title: './assets/svg/file.svg',
+            title: '../../assets/svg/file.svg',
             children: [{
                 title: 'create',
                 event: 'open-file-dialog',

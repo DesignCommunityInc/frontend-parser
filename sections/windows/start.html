@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../../assets/css/windows/start.css">
+    <title>Start page</title>
+</head>
+<body>
+    <h2 class="start-head-title">Welcome back!</h2>
+    <div class="start-container">
+        <h4 id="start-create">Create new project</h4>
+        <h4 id="start-open">Open exists</h4>
+        <h4 id="start-download">Download page</h4>
+        <input class="url-field"></input>
+    </div>
+    <div class="start-container">
+        <h4 id="start-settings">Settings</h4>
+        <h4 id="start-quit">Quit</h4>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        document.getElementsByTagName('input')[0].focus()
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelector('#start-open').addEventListener('click', function(e) {
+            sendMainAsync('open-file-dialog', 'openFile');
+        });
+        document.querySelector('#start-download').addEventListener('click', function(e) {
+            let url = 'someinputvalue';
+            sendMainAsync('download-page-message', url);
+        });
+    })
+    </script>
+</body>
+</html>
+   

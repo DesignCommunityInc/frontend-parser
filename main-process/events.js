@@ -14,5 +14,3 @@ ipcMain.on('goBack', () => {
     let window = BrowserWindow.getFocusedWindow().webContents
     window.send('goBack')
 })
-
-

@@ -1,58 +1,42 @@
 ui-context{
-    --max-height: 400px;
+    /* --max-height: 400px;
     --min-width: 150px;
-    --max-width: 300px;
+    --max-width: 300px; */
     --list-height: 30px;
     cursor: pointer;
     display: block;
-    position: absolute;
+    position: fixed;
+    visibility: hidden;
     /* min-width: var(--min-width);
     max-width: var(--max-width);
     max-height: var(--max-height); */
-    width: 250px;
-    height: 400px;
-    padding-bottom: var(--list-height);
+    /* width: 250px; */
+    /* padding-bottom: var(--list-height); */
     border-radius: 5px;
     background: #fff;
-    box-shadow: 0 0 30px -20px #323232;
+    box-shadow: 0 0 30px -15px #323232;
     overflow: hidden;
     z-index: 9999;
 }
-ui-context *{
-    cursor: pointer;
-}
-ui-context .span-wrapper {
-    display: block;
-    visibility: hidden;
+ui-context ui-context {
     position: absolute;
-    width: 100%;
-    max-height: var(--max-height);
-    top: 0;
-    overflow-x: hidden;
-    opacity: 0;
-    transition: .2s ease-in-out;
+    /* float: right; */
+    /* float: right; */
+    /* margin-top: - */
 }
-ui-context .span-wrapper-scaled{
-    transform: scale(.9);
-    transition: .2s ease-in-out;
-}
-ui-context .span-wrapper-scaled-invert {
-    transform: scale(1.1);
-    transition: .2s ease-in-out;
-}
-ui-context .span-wrapper-active {
-    padding-bottom: var(--list-height);
+.ui-shown {
     visibility: visible;
-    transform: scale(1);
-    opacity: 1;
-    transition: .2s ease-in-out;
 }
-ui-context span{
+ui-context * {
+    cursor: pointer;
+    outline: none!important;
+}
+ui-context span {
     display: block;
     position: relative;
-    padding: 10px;
+    padding: 5px 10px;
     font-size: 8pt;
-    font-weight: 700;
+    /* font-weight: 700; */
     color: #646464;
     user-select: none;
     z-index: 1;
@@ -64,89 +48,44 @@ ui-context span:hover{
     background: #eee;
     color: #323232;
 }
-ui-context h2{ /* Context Block Title */
+ui-context span:hover > ui-context,
+ui-context ui-context:hover {
+    visibility: visible;
+}
+ui-context .span-selected {
+    background: #1E90FF;
+}
+ui-context h3{
     position: sticky;
     top: 0;
-    padding: 10px;
+    padding: 5px 10px;
+    font-size: 10pt;
+    /* font-weight: 700; */
+    color: #646464;
+    background: #eee;
+    user-select: none;
+    opacity: .9;
+    z-index: 2;
+}
+ui-context p { /* Context Block Title */
+    position: relative;
+    float: right;
+    color: #929292;
+    padding-left: 50px;
+    font-size: 8pt;
+    /* padding: 10px;
     font-size: 10pt;
     font-weight: 700;
     color: #323232;
     background: #ccc;
     user-select: none;
     opacity: .9;
-    z-index: 2;
+    z-index: 2; */
 }
-ui-context .list{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: var(--list-height);
-    background: #fff;
-    box-shadow: 0 0 30px -15px #323232;
-    opacity: .9;
-    z-index: 3;
-    overflow: hidden;
-}
-ui-context .toolsList {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-}
-ui-context .classList{
-    position: sticky;
-    top: 0;
-}
-ui-context .classList .active{
-    background: #ccc; 
-}
-ui-context h3{ /* ClassList name */
-    text-align: center;
-    flex-basis: 20%;
-    padding: 10px;
-    font-size: 8pt;
-    font-weight: 700;
-    vertical-align: middle;
-    color: #323232;
-    user-select: none;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-ui-context h3:hover{
-    background: #eee;
-}
-ui-context .view {
-    display: block;
-    visibility: hidden;
-    position: absolute;
-    width: 100%;
-    max-height: var(--max-height);
-    top: 0;
-    overflow-x: hidden;
-    opacity: 0;
-    transition: .2s ease-in-out;
-}
-ui-context .view-scaled{
-    transform: scale(.9);
-    transition: .2s ease-in-out;
-}
-ui-context .view-scaled-invert {
-    transform: scale(1.1);
-    transition: .2s ease-in-out;
-}
-ui-context .view-active {
-    padding-bottom: var(--list-height);
-    visibility: visible;
-    transform: scale(1);
-    opacity: 1;
-    transition: .2s ease-in-out;
-}
-
-
-
-
 .ui-context-menu {
     display: none;
-    top: 0;
+    visibility: visible;
+    top: 40px;
     left: var(--tools-width);
     margin: 10px 0 0 10px;
 }
