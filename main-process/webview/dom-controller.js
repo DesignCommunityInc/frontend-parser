@@ -18,7 +18,12 @@ ipcMain.on('onHierarchyCreated', (event, sender) => {
             window.webContents.send('onHierarchyCreated-reply', sender); 
     });
 })
-
+ipcMain.on('element-created-message', (event, sender) => {
+    Array.prototype.forEach.call(BrowserWindow.getAllWindows(), (window) => {
+        if (window.getTitle() == 'rins-app') 
+            window.webContents.send('element-created-reply', sender); 
+    });
+})
 ipcMain.on('getSelectionArea', (event, sender) => {
     // let scrollTop = sender.scrollTop;
     let alignment = sender.alignment

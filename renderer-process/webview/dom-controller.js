@@ -16,10 +16,13 @@ let contextFields = [
                 role: 'Element node',
                 click: function() {
                     let node = document.createElement('div');
-                    node.addEventListener('click', clickNode);
+                    node.addEventListener('mouseup', elementSelected);
                     node.addEventListener('contextmenu', contextRightClickNode);
                     // here it needs to send ipc message for adding div to hierarchy
-                    sendMainAsync('element-created-message', { node: nodeHierarchyAttributes(node), arrayOfChild: null });
+                    sendMainAsync('element-created-message', { 
+                        node: nodeHierarchyAttributes(node), 
+                        parentKey: uiContext.selectedNode.getAttribute('key') 
+                    });
                     uiContext.selectedNode.append(node);
                 } },
             { role: 'Text node' },
@@ -78,12 +81,18 @@ render();
 
 function render() {
     sendMainAsync('onHierarchyCreated', treeConstructor(document.documentElement, true));  // Create tree of DOM nodes 
+    document.documentElement.setAttribute('key', keyGenerator(8));
     tempDivision.element = document.createElement('div');                                  // Create block for selection tool 
     tempDivision.element.classList.add('tmpDiv');                                          // and add class 
     Array.prototype.forEach.call(elementsList, (element, i) => {
         elementsList[i].css = getCSSRules(element.node);
     });
     // context ui
+    addListeners();
+    UIContextRenderer();
+    IPCAsync();                                                                            // After rendering call events()
+} 
+function UIContextRenderer() {
     Array.prototype.forEach.call(contextFields, fld => {
         let title = document.createElement('h3');
         let hotkey = document.createElement('p');
@@ -104,13 +113,11 @@ function render() {
         }
     });
     document.body.append(uiContext);
-    addListeners();
-    IPCAsync();                                                                            // After rendering call events()
-} 
+}
 function IPCAsync(){
     addRendererListener('getSelectionArea-reply', (event, sender) => {                          // IPC: Get selected area parametres: (x0, y0); (x1, y1)
         Object.keys(sender).forEach(key => {
-            this.tempDivision.element.style[key] = sender[key] + 'px';
+            tempDivision.element.style[key] = sender[key] + 'px';
         });
     });
     addRendererListener('element:mouseenter-message', (event, sender) => {
@@ -125,10 +132,16 @@ function IPCAsync(){
     // addRendererListener('getComputedStyles-message', (event, sender) => {
     //     event.sender.send('getComputedStyles-reply', window.getComputedStyle(document.documentElement).getPropertyValue(`${sender}`));
     // });
+    addRendererListener('set-css-rule', (event, sender) => {
+        setCSSRule(sender);
+    });
 }  
 function addListeners(){
-    let nodes = document.body.querySelectorAll('*');
-    nodes.addEventListener('click', clickNode);
+    let nodes = document.querySelectorAll('*');
+    nodes.addEventListener('click', function(e){
+        e.stopPropagation();
+        hideContextMenu();
+    });
     nodes.addEventListener('contextmenu', contextRightClickNode);
     window.addEventListener('blur', function(){ hideContextMenu(); });
     document.addEventListener("wheel", function(e){
@@ -151,11 +164,12 @@ function addListeners(){
         eventToggler(e);
     });
     document.addEventListener('mouseup', (e) => {
+        elementSelected(e);
         sendMainSync('resetSelectedTool');
         resetTempStyles();
     });
     document.addEventListener('keydown', function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         if (e.keyCode == 27) { 
             selectNode(selectedElement, false);
             return;
@@ -163,17 +177,17 @@ function addListeners(){
     });
 }
 // events 
-function clickNode(e) {
-    e.stopPropagation();
-    hideContextMenu();
-    sendMainAsync('element-selected-message', this.getAttribute('key'));
-    sendMainAsync('sendElementStyle-message', getCSSRules(this));
-}
 function contextRightClickNode(e) {
     e.stopPropagation();
     uiContext.selectedNode = this;
     setUIContextPosition(e.pageX, e.pageY);
     uiContext.classList.add('ui-shown');
+}
+function elementSelected(e) {
+    if(e.buttons !== 0) return;
+    e.stopPropagation();
+    sendMainAsync('element-selected-message', e.target.getAttribute('key'));
+    sendMainAsync('sendElementStyle-message', getCSSRules(e.target));
 }
 // FUNCTIONS -------------------------------------------------------------
 function setUIContextPosition(x, y){
@@ -218,7 +232,8 @@ function setSelectionArea(e) {
 }
 function resetTempStyles() {
     tempDivision.element.classList.add('tmpDiv-disable');
-    tempDivision.element.remove();
+    if(document.querySelector('.tmpDiv-disable') !== null)
+        tempDivision.element.remove();
 }
 // addNode() { 
 //     let node = this.tempDivision.element; // тута удалить el
@@ -247,6 +262,28 @@ function keyGenerator(length) {
     }
     return ret.substring(0,length);
 }
+// setCSSRule({
+//     fileName: 'standart.css',
+//     selector: '*',
+//     property: 'margin',
+//     value: '50px'
+// });
+function setCSSRule(sender) {
+    let file = sender.fileName;
+
+    Array.prototype.forEach.call(document.styleSheets, sheet => {
+        Array.prototype.forEach.call(sheet.cssRules, rule => {
+            if(`${rule.selectorText}` === sender.selector) {
+                // console.log(`${rule.selectorText}::${selector}`);
+                rule.style[sender.property] = sender.value;
+                console.log(rule.style[sender.property]);
+                return;
+            }
+        });
+        return;
+    });
+}
+
 function getCSSRules(node) {
     let styleSheets = document.styleSheets;
     let CSSRules = [];

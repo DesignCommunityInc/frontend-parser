@@ -8,7 +8,6 @@ ipcMain.on('sendElementStyle-message', (event, sender) => {
 })
 
 ipcMain.on('getComputedStyles', (event, sender) => {
-    let window = BrowserWindow.getFocusedWindow().webContents
+    let window = BrowserWindow.getFocusedWindow()
      window.webContents.send('getComputedStyles-webview', sender)
 })
-

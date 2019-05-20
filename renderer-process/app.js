@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ipcRenderer.send('devtools-webview-open')
     });
     document.addEventListener('keydown', function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         if (e.keyCode == 27) { 
             TopBar.scale.container.classList.remove('active-scale-list'); // Close scale list on Escape button
             return;

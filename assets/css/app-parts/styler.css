@@ -90,8 +90,8 @@
     color: var(--darkColor);
     -webkit-user-select: text;
 }
-.styler > .views > #main .complex > .css-prop,
-.styler > .views > #main .complex > .css-val{
+.styler > .views > #main .complex > .css-prop {
+/* .styler > .views > #main .complex > .css-val { */
     max-width: 0;
     overflow: hidden;
     white-space: nowrap;
@@ -108,7 +108,24 @@
 .styler > .views > #main .complex > .css-val{
     display: table-cell;
     position: relative;
-    width: 60%;
+    width: 85%;
     height: inherit;
     padding: 10px;
+    border: none;
+    color: var(--mainDarkColor);
+}
+.styler > .views > #main .complex > .css-val:focus{
+    outline-color: var(--hoverBlueColor);
+}
+.styler > .views  h3 {
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    font-size: 10pt;
+    /* font-weight: 700; */
+    color: #646464;
+    background: #eee;
+    user-select: none;
+    opacity: .9;
+    z-index: 2;
 }

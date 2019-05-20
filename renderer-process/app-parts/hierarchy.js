@@ -57,10 +57,13 @@ class Tree {
         ipcRenderer.on('element-selected-reply', (event, sender) => {
            this.branchElementSelected(sender);
         });
+        ipcRenderer.on('element-created-reply', (event, sender) => {
+            this.addNode(sender.node, sender.parentKey);
+         });
         ipcRenderer.on('clear-tree-reply', (event, sender) => {
             this.clearTree();
         });
-        ipcRenderer.on('ctrl+Y', (event, sender) => {
+        ipcRenderer.on('ctrl+B', (event, sender) => {
             let currentWidth = parseInt(this.container.style.width);
             let w = (currentWidth !== 0) ? 0 : this.widthCash;
             this.widthCash = (currentWidth !== 0) ? ((currentWidth > 150) ? currentWidth : 300) : this.widthCash;
@@ -140,6 +143,7 @@ class Tree {
     // TREE RENDERER FUNCTION 
     branchElementSelected(key) {
         let element = document.querySelector(`[key="${key}"]`);
+        console.log(element);
         let activeElements = document.querySelectorAll(`.${this.classNameSpace.branchShow}`);
         element.classList.add('h-item-child-selected');
         let foo = (parentElement) => {
@@ -197,8 +201,8 @@ class Tree {
     addNode(node, parentKey) {
         let parentElement = document.querySelector(`[key="${parentKey}"]`).closest('.branch');
         let listToPushNode = parentElement.querySelector('.h-item');
-        listToPushNode.append(listItemCreator(node));
-        branchElementSelected(node.key);
+        listToPushNode.append(this.listItemCreator(node));
+        this.branchElementSelected(node.key);
     }
     listItemCreator(node) {
         let textNodes = /\b(?:P|A|STRONG|SUB|SUP|H1|H2|H3|H4|H5|H6)\b/;
